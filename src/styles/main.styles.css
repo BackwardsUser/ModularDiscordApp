@@ -1,0 +1,132 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap');
+
+:root {
+    --backgroundColor: #1f1f1f;
+    --frameColor: #3f3f3f;
+}
+
+body {
+    background-color: var(--backgroundColor);
+    overflow: hidden;
+}
+
+.frame {
+    background-color: rgb(25, 25, 25);
+    width: 105%;
+    height: 50px;
+    margin-top: -6px;
+    margin-left: -6px;
+    -webkit-app-region: drag;
+}
+
+.frame.main {
+    margin-top: -24px;
+}
+
+.close {
+    background: none;
+    border: none;
+    color: #FFFFFF;
+    font-size: 35px;
+    position: absolute;
+    left: 95%;
+    cursor: pointer;
+    top: 5px;
+    -webkit-app-region: none;
+    transition: all 500ms ease-in;
+}
+
+.close:hover {
+    text-shadow: 0 0 0.5rem white;
+    color: #FFFFFF;
+}
+
+h1 {
+    color: #CCCCCC;
+    font-size: 40px;
+    font-family: 'Quicksand';
+}
+
+.input {
+    height: 50px;
+    width: 750px;
+    font-size: 25px;
+    border: none;
+    border-radius: 10px;
+    outline: none;
+    text-align: center;
+}
+
+.submit {
+    font-size: 25px;
+    font-family: 'Quicksand';
+    padding: 5px 25px;
+    background-color: #3f3f3f;
+    border: 2px solid #3f3f3f;
+    color: #dfdfdf;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 500ms ease-in;
+}
+
+.submit:hover {
+    background-color: #7f7f7f;
+    border-color: #7f7f7f;
+    color: #121212;
+}
+
+.incorrect.enabled {
+    font-size: 25px;
+    font-family: 'Quicksand';
+    color: rgb(175, 0, 0);
+}
+
+.incorrect.disabled {
+    display: none;
+}
+
+.menuico {
+    width: 30px;
+    height: 30px;
+    fill: #CCCCCC;
+}
+
+.invis {
+    position: absolute;
+    background: none;
+    border: none;
+    border-radius: 50%;
+    top: 11px;
+    -webkit-app-region: none;
+    transition: all 250ms ease-in;
+    cursor: pointer;
+}
+.invis:hover {
+    box-shadow: 0 0 0.1rem 0.1rem #4d4d4d;
+    background-color: #4d4d4d;
+}
+
+.invis:hover .menuico {
+    fill: #1f1f1f;
+}
+
+.profileHolder {
+    position: absolute;
+    top: 7px;
+    left: 70px;
+}
+
+.profile {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+}
+
+.profileTag {
+    font-size: 22px;
+    font-family: "Quicksand";
+    color: #CCCCCC;
+    position: relative;
+    top: -13px;
+    padding-left: 10px;
+}

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">\
+    <link rel="stylesheet" href="../styles/main.styles.css">
+    <title>main</title>
+</head>
+<body>
+    <div class="frame main"></div>
+    <button class="invis">
+        <svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false" class="menuico">
+            <g>
+                <path d="M21,6H3V5h18V6z M21,11H3v1h18V11z M21,17H3v1h18V17z"></path>
+            </g>
+        </svg>
+    </button>
+    <button class="close" >&times;</button>
+    <div class="profileHolder">
+        <img src="" alt="Failed to get Profile" id="profilePic" class="profile">
+        <a class="profileTag" id="profileTag"></a>
+    </div>
+    <br><br><br><br>
+    <div class="main">
+
+    </div>
+    <script>
+        const { ipcRenderer } = require('electron');
+    
+        const close = document.querySelector(".close").addEventListener('click', () => {
+            ipcRenderer.send('main:close');
+        });
+
+        ipcRenderer.on("login:success", (e, basicClientData) => {
+            console.log(basicClientData);
+            document.getElementById("profilePic").src = basicClientData.avatarURL;
+            document.getElementById("profileTag").innerHTML = basicClientData.tag;
+        })
+
+    </script>
+</body>
+</html>
