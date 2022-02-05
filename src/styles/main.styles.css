@@ -1,132 +1,161 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap');
 
 :root {
-    --backgroundColor: #1f1f1f;
-    --frameColor: #3f3f3f;
+    --black: #1f1f1f;
+    --lighter-black: #303030;
+    --dark-gray: #3f3f3f;
+    --gray: #4d4d4d;
+    --lighter-gray: #7f7f7f;
+    --lightest-gray: #CCCCCC;
+    --white: #dfdfdf;
+
+    --header-height: 50px;
+    --default-txt-size: 30px;
+}
+
+/* General Styles */
+
+header {
+    background-color: var(--dark-gray);
+    height: var(--header-height);
+    width: 110%;
+    position: relative;
+    left: -5%;
+    top: -7px;
+    -webkit-user-select: none;
+    -webkit-app-region: drag;
+    margin:auto;
+    box-shadow: 0 4px 0.5rem var(--lighter-black);
 }
 
 body {
-    background-color: var(--backgroundColor);
+    background-color: var(--gray);
+    color: var(--lightest-gray);
     overflow: hidden;
-}
-
-.frame {
-    background-color: rgb(25, 25, 25);
-    width: 105%;
-    height: 50px;
-    margin-top: -6px;
-    margin-left: -6px;
-    -webkit-app-region: drag;
-}
-
-.frame.main {
-    margin-top: -24px;
-}
-
-.close {
-    background: none;
-    border: none;
-    color: #FFFFFF;
-    font-size: 35px;
-    position: absolute;
-    left: 95%;
-    cursor: pointer;
-    top: 5px;
-    -webkit-app-region: none;
-    transition: all 500ms ease-in;
-}
-
-.close:hover {
-    text-shadow: 0 0 0.5rem white;
-    color: #FFFFFF;
-}
-
-h1 {
-    color: #CCCCCC;
-    font-size: 40px;
-    font-family: 'Quicksand';
-}
-
-.input {
-    height: 50px;
-    width: 750px;
-    font-size: 25px;
-    border: none;
-    border-radius: 10px;
-    outline: none;
+    font-size: 20px;
+    font-family: "Quicksand";
     text-align: center;
 }
 
-.submit {
-    font-size: 25px;
-    font-family: 'Quicksand';
-    padding: 5px 25px;
-    background-color: #3f3f3f;
-    border: 2px solid #3f3f3f;
-    color: #dfdfdf;
-    border-radius: 10px;
+.close {
+    padding: 0;
+    position: absolute;
+    font-size: var(--default-txt-size);
+    left: calc(90% + 10px);
+    padding: calc(var(--header-height) / 8) calc(var(--header-height) / 3.5);
+    -webkit-app-region: none;
+    color: var(--lightest-gray);
+    background: none;
+    border: solid rgba(255, 255, 255, 0) 1px;
     cursor: pointer;
-    transition: all 500ms ease-in;
+    transition: all 500ms;
 }
 
-.submit:hover {
-    background-color: #7f7f7f;
-    border-color: #7f7f7f;
-    color: #121212;
+.close:hover {
+    text-shadow: 0 0 0.5rem var(--white);
+    color: var(--white);
 }
 
-.incorrect.enabled {
-    font-size: 25px;
-    font-family: 'Quicksand';
-    color: rgb(175, 0, 0);
+
+/* Input Page */
+
+.tokenInput {
+    font-size: 20px;
+    padding: 5px 10px;
+    width: 600px;
+    text-align: center;
+    outline: none;
+    border: none;
+    box-shadow: 0 0 3rem var(--black);
+    font-family: "Quicksand";
+    border-radius: 20px;
 }
 
-.incorrect.disabled {
+.tokenButton {
+    font-size: 20px;
+    font-family: "Quicksand";
+    border: none;
+    border-radius: 10px;
+    padding: 5px 10px;
+    background-color: var(--lighter-gray);
+    cursor: pointer;
+    transition: all 500ms;
+}
+
+.tokenButton:hover {
+    background-color: var(--lightest-gray);
+    box-shadow: 0 0 1rem var(--white)
+}
+
+.incorrect {
     display: none;
 }
 
-.menuico {
-    width: 30px;
-    height: 30px;
-    fill: #CCCCCC;
+.incorrect.enabled {
+    display: block;
+    color: rgb(151, 0, 0);
+    font-size: 20px;
+    font-family: "Quicksand";
 }
 
-.invis {
+
+/* Main Page */
+
+.account {
     position: absolute;
+    left: 50px;
     background: none;
     border: none;
-    border-radius: 50%;
-    top: 11px;
+    padding: calc(var(--header-height) / 25) 0;
+    cursor: pointer;
     -webkit-app-region: none;
-    transition: all 250ms ease-in;
+}
+
+.profilePicture {
+    height: 45px;
+    width: 45px;
+    border-radius: 25px;
+}
+
+.accountName {
+    color: var(--lightest-gray);
+    position: relative;
+    top: -14px;
+    padding-left: 15px;
+    font-size: 25px
+}
+
+.dropdown.displayed {
+    position: absolute;
+    width: 150px;
+    height: auto;
+    background-color: var(--dark-gray);
+    top: 50px;
+    left: 85px;
+    padding: 10px 0;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.dropdown.hidden {
+    display: none;
+}
+
+.logout {
+    color: rgb(200, 0, 0);
+    font-size: 15px;
+    font-family: "Quicksand";
+    width:150px;
     cursor: pointer;
 }
-.invis:hover {
-    box-shadow: 0 0 0.1rem 0.1rem #4d4d4d;
-    background-color: #4d4d4d;
-}
 
-.invis:hover .menuico {
-    fill: #1f1f1f;
-}
-
-.profileHolder {
-    position: absolute;
-    top: 7px;
-    left: 70px;
-}
-
-.profile {
-    height: 40px;
-    width: 40px;
-    border-radius: 50%;
-}
-
-.profileTag {
-    font-size: 22px;
-    font-family: "Quicksand";
-    color: #CCCCCC;
+.botStatus {
     position: relative;
-    top: -13px;
-    padding-left: 10px;
+    top: 15px;
+    padding: 5px 10px;
+    font-size: 20px;
+    font-family: "Quicksand";
+    border-radius: 10px;
+    background-color: var(--white);
+    outline: none;
 }

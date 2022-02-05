@@ -3,27 +3,12 @@ const url = require('url');
 const path = require('path');
 
 const Discord = require('discord.js');
-const client = new Discord.Client({
-    intents: [
-        "DIRECT_MESSAGES",
-        "DIRECT_MESSAGE_REACTIONS",
-        "DIRECT_MESSAGE_TYPING",
-        "GUILDS",
-        "GUILD_BANS",
-        "GUILD_EMOJIS_AND_STICKERS",
-        "GUILD_INTEGRATIONS",
-        "GUILD_INVITES",
-        "GUILD_MEMBERS",
-        "GUILD_MESSAGES",
-        "GUILD_MESSAGE_REACTIONS",
-        "GUILD_MESSAGE_TYPING",
-        "GUILD_PRESENCES",
-        "GUILD_VOICE_STATES",
-        "GUILD_WEBHOOKS",
-    ],
-});
+
+let client;
 
 let mainWindow;
+
+let basicClientData = {};
 
 app.on('ready', () => {
     console.clear();
@@ -31,6 +16,7 @@ app.on('ready', () => {
         width: 1000,
         height: 600,
         frame: false,
+        resizable: false,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false
@@ -51,31 +37,68 @@ app.on('ready', () => {
 })
 
 ipcMain.on('main:close', () => {
+    if (client) client.destroy();
     mainWindow.destroy()
 })
 
-ipcMain.on('login', (e, token) => {
-    client.login(token).catch(err => {
-        mainWindow.webContents.send('login:fail')
-        if (err) throw err;
+ipcMain.on('account:login', (e, token) => {
+
+    client = new Discord.Client({
+        intents: [
+            "DIRECT_MESSAGES",
+            "DIRECT_MESSAGE_REACTIONS",
+            "DIRECT_MESSAGE_TYPING",
+            "GUILDS",
+            "GUILD_BANS",
+            "GUILD_EMOJIS_AND_STICKERS",
+            "GUILD_INTEGRATIONS",
+            "GUILD_INVITES",
+            "GUILD_MEMBERS",
+            "GUILD_MESSAGES",
+            "GUILD_MESSAGE_REACTIONS",
+            "GUILD_MESSAGE_TYPING",
+            "GUILD_PRESENCES",
+            "GUILD_VOICE_STATES",
+            "GUILD_WEBHOOKS",
+        ],
     });
+
+    client.login(token).catch(err => {
+        mainWindow.webContents.send('account:login:fail')
+        if (err) return;
+    });
+
+    client.on('ready', () => {
+        mainWindow.loadURL(url.format({
+            pathname: path.join(__dirname, 'pages/main.html'),
+            protocol: 'file:',
+            slashes: true,
+        }));
+    
+        basicClientData = {
+            "avatarURL" : client.user.avatarURL(),
+            "name" : client.user.username,
+            "serverCount" : client.guilds.cache.size
+        }
+    });
+
 });
 
-client.on('ready', () => {
-    console.log(`logged in as ${client.user.tag}`);
+ipcMain.on('account:login:request:basicClientInfo', () => {
+    mainWindow.webContents.send('account:login:send:clientBasicInfo', basicClientData)
+})
 
+ipcMain.on('account:logout', () => {
+    client.destroy();
     mainWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'pages/main.html'),
+        pathname: path.join(__dirname, 'pages/login.html'),
         protocol: 'file:',
         slashes: true,
     }));
+});
 
-    const basicClientData = {
-        "avatarURL" : client.user.avatarURL(),
-        "tag" : client.user.tag
-    }
-
-    setTimeout( () => {
-        mainWindow.webContents.send('login:success', basicClientData);
-    }, 500);
+ipcMain.on('account:status:changed', (e, updatedStatus) => {
+    console.log(client.user.presence);
+    client.user.setStatus(updatedStatus);
+    console.log(client.user.presence)
 });

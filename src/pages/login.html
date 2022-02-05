@@ -7,19 +7,16 @@
     <link rel="stylesheet" href="../styles/main.styles.css">
     <title>LOGIN</title>
 </head>
+<header>
+    <button class="close" id="closeBtn">&times;</button>
+</header>
 <body>
-    <div class="frame"></div>
-    <button class="close" >&times;</button>
-    <br><br><br><br>
-    <div class="main">
-        <center>
-            <h1>Login</h1>
-            <a class="incorrect disabled">Incorrect Token</a>
-            <br><br><br>
-            <input type="password" class="input" id="input" placeholder="Bot Token"><br><br>
-            <button type="submit" class="submit">Login</button>
-        </center>
-    </div>
+    <form class="loginForm" id="login">
+        <h1>Login</h1><br>
+        <a class="incorrect">Incorrect Token</a><br>
+        <input type="password" class="tokenInput" id="tokenInput" placeholder="Bot Token"><br><br>
+        <button type="submit" class="tokenButton" id="tokenSubmit">Login</button>
+    </form>
 </body>
 <script>
     const { ipcRenderer } = require('electron');
@@ -28,12 +25,13 @@
         ipcRenderer.send('main:close');
     });
 
-    const login = document.querySelector(".submit").addEventListener('click', () => {
-        ipcRenderer.send('login', document.getElementById("input").value);
+    const login = document.getElementById("login").addEventListener('submit', () => {
+        const inputValue = document.getElementById('tokenInput').value
+        ipcRenderer.send('account:login', inputValue)
     });
 
-    ipcRenderer.on('login:fail', () => {
-        document.querySelector('.incorrect').className = "incorrect enabled"
-    })
+    ipcRenderer.on('account:login:fail', () => {
+        document.querySelector('.incorrect').className = "incorrect enabled";
+    });
 </script>
 </html>
