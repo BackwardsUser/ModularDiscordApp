@@ -13,25 +13,25 @@
 <body>
     <form class="loginForm" id="login">
         <h1>Login</h1><br>
-        <a class="incorrect">Incorrect Token</a><br>
+        <a class="incorrect" id="incorrect">Incorrect Token</a><br>
         <input type="password" class="tokenInput" id="tokenInput" placeholder="Bot Token"><br><br>
-        <button type="submit" class="tokenButton" id="tokenSubmit">Login</button>
+        <button type="submit" class="tokenButton button" id="tokenSubmit">Login</button>
     </form>
 </body>
 <script>
     const { ipcRenderer } = require('electron');
     
-    const close = document.querySelector(".close").addEventListener('click', () => {
+    document.querySelector(".close").addEventListener('click', () => {
         ipcRenderer.send('main:close');
     });
 
-    const login = document.getElementById("login").addEventListener('submit', () => {
+    document.getElementById("login").addEventListener('submit', () => {
         const inputValue = document.getElementById('tokenInput').value
-        ipcRenderer.send('account:login', inputValue)
+        ipcRenderer.send('main:account:login', inputValue)
     });
 
-    ipcRenderer.on('account:login:fail', () => {
-        document.querySelector('.incorrect').className = "incorrect enabled";
+    ipcRenderer.on('main:account:login:fail', () => {
+        document.getElementById('incorrect').className = "incorrect enabled";
     });
 </script>
 </html>

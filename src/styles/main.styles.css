@@ -35,6 +35,8 @@ body {
     font-size: 20px;
     font-family: "Quicksand";
     text-align: center;
+    align-items: center;
+    align-content: center;
 }
 
 .close {
@@ -57,9 +59,33 @@ body {
 }
 
 
-/* Input Page */
+select {
+    position: relative;
+    padding: 5px 10px;
+    font-size: 20px;
+    font-family: "Quicksand";
+    border-radius: 10px;
+    background-color: var(--white);
+    outline: none;
+}
 
-.tokenInput {
+.button {
+    font-size: 20px;
+    font-family: "Quicksand";
+    border: none;
+    border-radius: 10px;
+    padding: 5px 10px;
+    background-color: var(--lighter-gray);
+    cursor: pointer;
+    transition: all 500ms;
+}
+
+.button:hover {
+    background-color: var(--lightest-gray);
+    box-shadow: 0 0 1rem var(--white)
+}
+
+input {
     font-size: 20px;
     padding: 5px 10px;
     width: 600px;
@@ -71,21 +97,8 @@ body {
     border-radius: 20px;
 }
 
-.tokenButton {
-    font-size: 20px;
-    font-family: "Quicksand";
-    border: none;
-    border-radius: 10px;
-    padding: 5px 10px;
-    background-color: var(--lighter-gray);
-    cursor: pointer;
-    transition: all 500ms;
-}
 
-.tokenButton:hover {
-    background-color: var(--lightest-gray);
-    box-shadow: 0 0 1rem var(--white)
-}
+/* Input Page */
 
 .incorrect {
     display: none;
@@ -93,7 +106,7 @@ body {
 
 .incorrect.enabled {
     display: block;
-    color: rgb(151, 0, 0);
+    color: rgb(255, 0, 0);
     font-size: 20px;
     font-family: "Quicksand";
 }
@@ -149,13 +162,9 @@ body {
     cursor: pointer;
 }
 
-.botStatus {
-    position: relative;
-    top: 15px;
-    padding: 5px 10px;
-    font-size: 20px;
-    font-family: "Quicksand";
-    border-radius: 10px;
+.activity {
     background-color: var(--white);
-    outline: none;
+    padding: 10px 25px;
+    color: var(--dark-gray);
+    border-radius: 10px;
 }

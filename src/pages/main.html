@@ -18,12 +18,18 @@
     <button class="close" id="closeBtn">&times;</button>
 </header>
 <body>
+    <br>
     <select name="BotStatus" id="botStatus" class="botStatus" >
         <option value="online">Online</option>
         <option value="dnd">DnD</option>
         <option value="idle">Away</option>
         <option value="invisible">Offline</option>
-    </select>
+    </select><br><br><br>
+    <center>
+        <div class="activity" id="currentActivity">No Activity Set. Set it with the button below!</div>
+    </center><br>
+    <button class="button" id="activity">Set Activity</button>
+
 </body>
 <script>
 
@@ -32,10 +38,11 @@
     const { ipcRenderer } = require('electron');
     const profilePicture = document.getElementById('profilePicture');
     const accountName = document.getElementById('accountName');
+    const currentActivity = document.getElementById('currentActivity');
 
-    ipcRenderer.send('account:login:request:basicClientInfo');
+    ipcRenderer.send('main:account:request:basicClientInfo');
 
-    ipcRenderer.on('account:login:send:clientBasicInfo', (e, basicClientInfo) => {
+    ipcRenderer.on('main:account:send:clientBasicInfo', (e, basicClientInfo) => {
         basicClientData = basicClientInfo;
         profilePicture.src = basicClientData.avatarURL;
         accountName.innerHTML = basicClientData.name;
@@ -55,13 +62,21 @@
     });
 
     document.getElementById('logout').addEventListener('click', () => {
-        ipcRenderer.send('account:logout');
+        ipcRenderer.send('main:account:logout');
     });
 
     document.getElementById('botStatus').addEventListener('change', () => {
-        console.log(document.getElementById('botStatus').value)
-        ipcRenderer.send('account:status:changed', document.getElementById('botStatus').value)
-    })
+        ipcRenderer.send('main:account:status:changed', document.getElementById('botStatus').value);
+    });
+
+    document.getElementById('activity').addEventListener('click', () => {
+        ipcRenderer.send('page:open:activity');
+    });
+
+    ipcRenderer.on('main:account:send:activity', (e, activity) => {
+        console.log(activity);
+        currentActivity.innerText = activity.type + " " + activity.name;
+    });
 
 </script>
 </html>
