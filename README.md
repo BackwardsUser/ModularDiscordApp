@@ -1,1 +1,1 @@
-# This is no where near done. I will update this README when its done.
+# Don't take from Dev branch. Never take from Dev branch, always a bad idea.
