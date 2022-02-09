@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const url = require('url');
 const path = require('path');
+const fs = require('fs');
 
 const Discord = require('discord.js');
 
@@ -66,12 +67,31 @@ ipcMain.on('main:account:login', (e, token) => {
         ],
     });
 
+    client.commands = new Discord.Collection();
+    const commandFiles = fs.readdirSync(path.join(__dirname, "..", "Addons", "Commands")).filter(file => file.endsWith('.js'));
+
+    for (const file of commandFiles) {
+        const command = require(path.join(__dirname, "..", "Addons", "Commands", file));
+        client.commands.set(command.data.name, command)
+    }
+
+    const eventFiles = fs.readdirSync(path.join(__dirname, "..", "Addons", "Events")).filter(file => file.endsWith('.js'))
+
+    for (const file of eventFiles) {
+        const event = require(path.join(__dirname, "..", "Addons", "Events", file));
+        if (event.once) {
+            client.once(event.name, (...args) => event.execute(...args));
+        } else {
+            client.on(event.name, (...args) => event.execute(...args));
+        }
+    }
+
     client.login(token).catch(err => {
         mainWindow.webContents.send('main:account:login:fail');
         if (err) return;
     });
 
-    client.on('ready', () => {
+    client.once('ready', () => {
         mainWindow.loadURL(url.format({
             pathname: path.join(__dirname, 'pages/main.html'),
             protocol: 'file:',
@@ -131,8 +151,8 @@ ipcMain.on('main:account:require:activity', () => {
     mainWindow.webContents.send('main:account:send:activity', client.user.presence.activities);
 });
 
-let interval
-let activityObj = {}
+let interval;
+let activityObj = {};
 
 ipcMain.on('secondary:account:set:activity', (e, activity) => {
     if (Object.keys(activity.name).length === 1) {
@@ -140,8 +160,8 @@ ipcMain.on('secondary:account:set:activity', (e, activity) => {
         activityObj = {
             type: client.user.presence.activities[0].type,
             name: client.user.presence.activities[0].name
-        }
-        mainWindow.webContents.send('main:account:send:activity', activityObj)
+        };
+        mainWindow.webContents.send('main:account:send:activity', activityObj);
         return;
     };
     var i = -1;
@@ -149,14 +169,14 @@ ipcMain.on('secondary:account:set:activity', (e, activity) => {
     interval = setInterval(() => {
         i = i + 1;
         if (i == Object.keys(activity.name).length) return i = -1
-        if (i == 0) client.user.setActivity({type: activity.type.activityA, name: `${activity.name.activityA}`})
-        if (i == 1) client.user.setActivity({type: activity.type.activityB, name: `${activity.name.activityB}`})
-        if (i == 2) client.user.setActivity({type: activity.type.activityC, name: `${activity.name.activityC}`})
-        if (i == 3) client.user.setActivity({type: activity.type.activityD, name: `${activity.name.activityD}`})
+        if (i == 0) client.user.setActivity({type: activity.type.activityA, name: `${activity.name.activityA}`});
+        if (i == 1) client.user.setActivity({type: activity.type.activityB, name: `${activity.name.activityB}`});
+        if (i == 2) client.user.setActivity({type: activity.type.activityC, name: `${activity.name.activityC}`});
+        if (i == 3) client.user.setActivity({type: activity.type.activityD, name: `${activity.name.activityD}`});
         activityObj = {
             type: client.user.presence.activities[0].type,
             name: client.user.presence.activities[0].name
-        }
-        mainWindow.webContents.send('main:account:send:activity', activityObj)
-    }, (activity.loopTime * 1000))
-})
+        };
+        mainWindow.webContents.send('main:account:send:activity', activityObj);
+    }, (activity.loopTime * 1000));
+});
