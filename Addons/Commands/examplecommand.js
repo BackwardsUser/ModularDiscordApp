@@ -1,6 +1,7 @@
 module.exports = {
     data: {
         Name: "examplecommand",
+        Author: "BackwardsUser",
         Description: "Just an Example Command"
     },
     async execute(message, args) {

@@ -67,12 +67,17 @@ ipcMain.on('main:account:login', (e, token) => {
         ],
     });
 
+    client.login(token).catch(err => {
+        mainWindow.webContents.send('main:account:login:fail');
+        if (err) return;
+    });
+
     client.commands = new Discord.Collection();
     const commandFiles = fs.readdirSync(path.join(__dirname, "..", "Addons", "Commands")).filter(file => file.endsWith('.js'));
 
     for (const file of commandFiles) {
         const command = require(path.join(__dirname, "..", "Addons", "Commands", file));
-        client.commands.set(command.data.name, command)
+        client.commands.set(command.data.Name, command);
     }
 
     const eventFiles = fs.readdirSync(path.join(__dirname, "..", "Addons", "Events")).filter(file => file.endsWith('.js'))
@@ -85,11 +90,6 @@ ipcMain.on('main:account:login', (e, token) => {
             client.on(event.name, (...args) => event.execute(...args));
         }
     }
-
-    client.login(token).catch(err => {
-        mainWindow.webContents.send('main:account:login:fail');
-        if (err) return;
-    });
 
     client.once('ready', () => {
         mainWindow.loadURL(url.format({
@@ -104,23 +104,29 @@ ipcMain.on('main:account:login', (e, token) => {
             "serverCount" : client.guilds.cache.size
         };
     });
-});
 
-if (client) {
     client.on('messageCreate', async message => {
-        const args = message.content.slice(/*prefix.length*/).split(' ');
+
+        const prefix = "!";
+
+        const args = message.content.slice(prefix.length).split(' ');
         const command = args.shift().toLowerCase();
 
-	    if (!command) return;
+        const cmd = client.commands.get(command);
 
-	    try {
-	    	await command.execute(message, args);
-	    } catch (error) {
-	    	console.error(error);
-	        await message.reply({ content: 'There was an error while executing this command!'});
-	    }
+        console.log(cmd);
+
+        if (!cmd || message.author.bot || !message.content.startsWith(prefix)) return;
+
+        try {
+            await cmd.execute(message, args);
+        } catch (error) {
+            console.error(error);
+            await message.reply({ content: 'There was an error while executing this command!'});
+        }
     })
-}
+
+});
 
 ipcMain.on('main:account:request:basicClientInfo', () => {
     mainWindow.webContents.send('main:account:send:clientBasicInfo', basicClientData);
@@ -222,4 +228,31 @@ ipcMain.on('page:open:plugins', () => {
 
 ipcMain.on('secondary:account:request:basicClientInfo:plugins', () => {
     secondaryWindow.webContents.send('secondary:account:send:basicClientInfo:plugins', client.commands.size)
+})
+
+ipcMain.on('secondary:page:open:commands', () => {
+    secondaryWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'pages/plugins/commands.html'),
+        protocol: 'file:',
+        slashes: true,
+    }))
+})
+
+ipcMain.on('secondary:account:request:basicClientInfo:commands', () => {
+    
+    let commands = {}
+
+    for (const command of client.commands) {
+
+        const cmd = client.commands.get(command[0])
+
+        commands[cmd.data.Name] = {
+            Author: cmd.data.Author,
+            Description: cmd.data.Description
+        }
+    }
+
+    setTimeout(() => {
+        secondaryWindow.webContents.send('secondary:account:send:basicClientInfo:commands', commands);
+    }, 125)
 })
