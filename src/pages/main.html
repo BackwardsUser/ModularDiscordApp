@@ -28,8 +28,8 @@
     <center>
         <div class="activity" id="currentActivity">No Activity Set. Set it with the button below!</div>
     </center><br>
-    <button class="button" id="activity">Set Activity</button>
-
+    <button class="button" id="activity">Set Activity</button><br><br><br>
+    <button class="button" id="plugins">Plugins</button>
 </body>
 <script>
 
@@ -77,6 +77,10 @@
         console.log(activity);
         currentActivity.innerText = activity.type + " " + activity.name;
     });
+
+    document.getElementById('plugins').addEventListener('click', () => {
+        ipcRenderer.send('page:open:plugins')
+    })
 
 </script>
 </html>

@@ -106,6 +106,22 @@ ipcMain.on('main:account:login', (e, token) => {
     });
 });
 
+if (client) {
+    client.on('messageCreate', async message => {
+        const args = message.content.slice(/*prefix.length*/).split(' ');
+        const command = args.shift().toLowerCase();
+
+	    if (!command) return;
+
+	    try {
+	    	await command.execute(message, args);
+	    } catch (error) {
+	    	console.error(error);
+	        await message.reply({ content: 'There was an error while executing this command!'});
+	    }
+    })
+}
+
 ipcMain.on('main:account:request:basicClientInfo', () => {
     mainWindow.webContents.send('main:account:send:clientBasicInfo', basicClientData);
 });
@@ -128,6 +144,8 @@ ipcMain.on('main:account:status:changed', (e, updatedStatus) => {
 });
 
 ipcMain.on('page:open:activity', () => {
+
+    if (secondaryWindow) secondaryWindow.destroy();
 
     secondaryWindow = new BrowserWindow({
         width: 1000,
@@ -180,3 +198,28 @@ ipcMain.on('secondary:account:set:activity', (e, activity) => {
         mainWindow.webContents.send('main:account:send:activity', activityObj);
     }, (activity.loopTime * 1000));
 });
+
+ipcMain.on('page:open:plugins', () => {
+    if (secondaryWindow) secondaryWindow.destroy();
+
+    secondaryWindow = new BrowserWindow({
+        width: 1000,
+        height: 600,
+        frame: false,
+        resizable: false,
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false
+        }
+    });
+
+    secondaryWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'pages/plugins.html'),
+        protocol: 'file:',
+        slashes: true,
+    }));
+})
+
+ipcMain.on('secondary:account:request:basicClientInfo:plugins', () => {
+    secondaryWindow.webContents.send('secondary:account:send:basicClientInfo:plugins', client.commands.size)
+})

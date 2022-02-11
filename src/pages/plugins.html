@@ -4,9 +4,51 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="../styles/main.styles.css">
+    <title>plugins</title>
 </head>
+<header>
+    <div class="account" id="account">
+        <img src="" class="profilePicture" id="profilePicture">
+        <a class="accountName" id="accountName"></a>
+    </div>
+    <button class="close" id="closeBtn">&times;</button>
+</header>
 <body>
-    
+    <br><br>
+    <button class="button addonsBTN" id="commands">
+        <div class="text">
+            Commands
+        </div>
+        <div class="modCount" id="commandCount">
+            0
+        </div>
+    </button>
 </body>
+<script>
+    basicClientData = {};
+
+    const { ipcRenderer } = require('electron');
+    const profilePicture = document.getElementById('profilePicture');
+    const accountName = document.getElementById('accountName');
+    const commandsCount = document.getElementById('commandCount');
+
+    document.querySelector(".close").addEventListener('click', () => {
+        ipcRenderer.send('secondary:close');
+    });
+
+    ipcRenderer.send('secondary:account:request:basicClientInfo');
+
+    ipcRenderer.on('secondary:account:send:clientBasicInfo', (e, basicClientInfo) => {
+        basicClientData = basicClientInfo;
+        profilePicture.src = basicClientData.avatarURL;
+        accountName.innerHTML = basicClientData.name;
+    });
+
+    ipcRenderer.send('secondary:account:request:basicClientInfo:plugins')
+
+    ipcRenderer.on('secondary:account:send:basicClientInfo:plugins', (e, commandCount) => {
+        commandsCount.textContent = commandCount;
+    })
+</script>
 </html>

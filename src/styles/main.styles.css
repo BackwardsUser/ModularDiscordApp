@@ -170,3 +170,21 @@ input {
     color: var(--dark-gray);
     border-radius: 10px;
 }
+
+
+/* Plugins */
+
+.addonsBTN {
+    padding: 10px 15px;
+    background: linear-gradient(90deg, var(--lighter-gray) 8.25rem, var(--lightest-gray) 5rem);
+}
+
+.text {
+    float: left;
+    margin-right: 10px
+}
+
+.modCount {
+    float:right;
+    margin-left: 10px;
+}
