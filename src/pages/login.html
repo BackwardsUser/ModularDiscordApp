@@ -15,6 +15,7 @@
         <h1>Login</h1><br>
         <a class="incorrect" id="incorrect">Incorrect Token</a><br>
         <input type="password" class="tokenInput" id="tokenInput" placeholder="Bot Token"><br><br>
+        <input type="text" class="prefixInput" id="prefixInput"><br><br>
         <button type="submit" class="tokenButton button" id="tokenSubmit">Login</button>
     </form>
 </body>
@@ -27,11 +28,18 @@
 
     document.getElementById("login").addEventListener('submit', () => {
         const inputValue = document.getElementById('tokenInput').value
-        ipcRenderer.send('main:account:login', inputValue)
+        const prefixInput = document.getElementById('prefixInput').value
+        const loginObject = {
+            token: inputValue, 
+            prefix: prefixInput
+        };
+        console.log(loginObject);
+        ipcRenderer.send('main:account:login', loginObject)
     });
 
     ipcRenderer.on('main:account:login:fail', () => {
         document.getElementById('incorrect').className = "incorrect enabled";
     });
+
 </script>
 </html>
