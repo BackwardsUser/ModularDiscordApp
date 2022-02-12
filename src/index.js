@@ -12,6 +12,8 @@ let secondaryWindow;
 
 let basicClientData = {};
 
+let prefix;
+
 app.on('ready', () => {
     console.clear();
     mainWindow = new BrowserWindow({
@@ -45,7 +47,12 @@ ipcMain.on('secondary:close', () => {
     secondaryWindow.destroy();
 });
 
-ipcMain.on('main:account:login', (e, token) => {
+ipcMain.on('main:account:login', (e, loginArray) => {
+
+    const prfx = loginArray.prefix;
+    const token = loginArray.token;
+
+    prefix = prfx;
 
     client = new Discord.Client({
         intents: [
@@ -106,8 +113,6 @@ ipcMain.on('main:account:login', (e, token) => {
     });
 
     client.on('messageCreate', async message => {
-
-        const prefix = "!";
 
         const args = message.content.slice(prefix.length).split(' ');
         const command = args.shift().toLowerCase();
