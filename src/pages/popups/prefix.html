@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../styles/main.styles.css">
+
+    <title>Prefix</title>
+
+</head>
+
+<body>
+
+    <header>
+        <button class="prefixpopupclose close" id="close">&times;</button>
+    </header>
+
+    <h1>Prefix</h1>
+
+    <label for="#input" id="inputLabel">Set a prefix</label>
+    <input type="text" class="prefixpopupinput" id="input" placeholder="Set a Prefix">
+    <br><br>
+    <button class="button" id="submit">Set Prefix to</button>
+
+    <script>
+        const { ipcRenderer } = require("electron");
+
+        const input = document.getElementById('input');
+        const inputLabel = document.getElementById('inputLabel');
+        const submit = document.getElementById('submit');
+
+        let basicClientData;
+
+        document.getElementById("close").addEventListener('click', () => {
+            ipcRenderer.send('secondary:close')
+        })
+
+        ipcRenderer.send('secondary:account:request:basicClientInfo');
+
+        ipcRenderer.on('secondary:account:send:clientBasicInfo', (e, basicClientInfo) => {
+            basicClientData = basicClientInfo
+            if (basicClientInfo.prefix)  input.value = basicClientInfo.prefix, inputLabel.innerText = "The Current Prefix is:";
+        })
+
+        setInterval( () => {
+            if (input.value == basicClientData.prefix)  {
+                inputLabel.className = "inputLabel"
+                inputLabel.innerText = "The Current Prefix is:";
+                submit.innerText = "Prefix hasn't changed"
+                submit.disabled = false
+            } else if (input.value == "") {
+                inputLabel.className = "inputLabel hidden";
+                submit.innerText = "You must set a prefix."
+                submit.disabled = true
+            } else {
+                inputLabel.className = "inputLabel";
+                inputLabel.innerText = "Set a Prefix:";
+                submit.innerText = `Set Prefix to: ${input.value}`
+                submit.disabled = false
+            };
+        }, 100)
+
+        submit.addEventListener('click', () => {
+            ipcRenderer.send('basicClientData:update:prefix', input.value);
+        })
+
+    </script>
+
+</body>
+
+</html>

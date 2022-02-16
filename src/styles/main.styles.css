@@ -57,6 +57,7 @@ body {
     align-content: center;
     position: relative;
     top: 50px;
+    -webkit-user-select: none;
 }
 
 .close {
@@ -118,7 +119,7 @@ input {
 }
 
 .disabled {
-    cursor: default;
+    cursor: default !important;
 }
 
 
@@ -178,12 +179,19 @@ input {
     display: none;
 }
 
-.logout {
-    color: rgb(200, 0, 0);
+.logout, .prefix {
     font-size: 15px;
     font-family: "Quicksand";
-    width:150px;
+    width: 100%;
     cursor: pointer;
+}
+
+.logout {
+    color: rgb(200, 0, 0);
+}
+
+.prefix {
+    color: rgb(240, 240, 240);
 }
 
 .activity {
@@ -191,6 +199,11 @@ input {
     padding: 10px 25px;
     color: var(--dark-gray);
     border-radius: 10px;
+}
+
+.center {
+    width: 100%;
+    align-items: center;
 }
 
 
@@ -221,4 +234,18 @@ input {
     border: solid 4px var(--dark-gray);
     border-radius: 10px;
     margin: 5px 0;
+}
+
+
+/* Prefix */
+.prefixpopupclose {
+    left: 468px;
+}
+
+.prefixpopupinput {
+    width: 400px
+}
+
+.hidden {
+    visibility: hidden;
 }

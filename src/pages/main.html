@@ -5,18 +5,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../styles/main.styles.css">
-    <title>main</title>
+    <title>Main</title>
 </head>
+
 <header>
     <button class="account" id="account">
         <img src="" class="profilePicture" id="profilePicture">
         <a class="accountName" id="accountName"></a>
     </button>
     <div class="dropdown hidden" id="dropdown">
+        <a class="prefix" id="prefix">prefix: nil</a><br>
         <a class="logout" id="logout">Logout</a>
     </div>
     <button class="close" id="closeBtn">&times;</button>
 </header>
+
 <body>
     <br>
     <select name="BotStatus" id="botStatus" class="botStatus" >
@@ -25,9 +28,9 @@
         <option value="idle">Away</option>
         <option value="invisible">Offline</option>
     </select><br><br><br>
-    <center>
+    <div class="center">
         <div class="activity" id="currentActivity">No Activity Set. Set it with the button below!</div>
-    </center><br>
+    </div><br>
     <button class="button" id="activity">Set Activity</button><br><br><br>
     <button class="button" id="plugins">Plugins</button>
 </body>
@@ -39,6 +42,7 @@
     const profilePicture = document.getElementById('profilePicture');
     const accountName = document.getElementById('accountName');
     const currentActivity = document.getElementById('currentActivity');
+    const prefix = document.getElementById('prefix');
 
     ipcRenderer.send('main:account:request:basicClientInfo');
 
@@ -46,6 +50,7 @@
         basicClientData = basicClientInfo;
         profilePicture.src = basicClientData.avatarURL;
         accountName.innerHTML = basicClientData.name;
+        prefix.innerText = `Prefix: ${basicClientData.prefix}`;
     });
 
     document.getElementById('closeBtn').addEventListener('click', () => {
@@ -81,6 +86,10 @@
     document.getElementById('plugins').addEventListener('click', () => {
         ipcRenderer.send('page:open:plugins')
     })
+
+    prefix.addEventListener('click', () => {
+        ipcRenderer.send('page:open:prefixPopup');
+    });
 
 </script>
 </html>

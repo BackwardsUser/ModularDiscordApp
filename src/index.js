@@ -49,10 +49,8 @@ ipcMain.on('secondary:close', () => {
 
 ipcMain.on('main:account:login', (e, loginArray) => {
 
-    const prfx = loginArray.prefix;
+    prefix = loginArray.prefix;
     const token = loginArray.token;
-
-    prefix = prfx;
 
     client = new Discord.Client({
         intents: [
@@ -108,7 +106,8 @@ ipcMain.on('main:account:login', (e, loginArray) => {
         basicClientData = {
             "avatarURL" : client.user.avatarURL(),
             "name" : client.user.username,
-            "serverCount" : client.guilds.cache.size
+            "serverCount" : client.guilds.cache.size,
+            "prefix" : prefix
         };
     });
 
@@ -260,4 +259,30 @@ ipcMain.on('secondary:account:request:basicClientInfo:commands', () => {
     setTimeout(() => {
         secondaryWindow.webContents.send('secondary:account:send:basicClientInfo:commands', commands);
     }, 125)
+});
+
+ipcMain.on('page:open:prefixPopup', () => {
+    if (secondaryWindow) secondaryWindow.destroy();
+    secondaryWindow = new BrowserWindow({
+        width: 500,
+        height: 600,
+        frame: false,
+        resizable: false,
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false
+        },
+    });
+
+    secondaryWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'pages/popups/prefix.html'),
+        protocol: 'file:',
+        slashes: true,
+    }));
+});
+
+ipcMain.on('basicClientData:update:prefix', (e, prefix) => {
+    basicClientData.prefix = prefix;
+    secondaryWindow.destroy();
+    mainWindow.reload();
 })
