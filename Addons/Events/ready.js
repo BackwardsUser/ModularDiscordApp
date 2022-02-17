@@ -19,6 +19,8 @@ module.exports = {
 	// read more here, https://discord.js.org/#/docs/discord.js/stable/class/Client
 
 	name: 'ready',
+	description: 'Event "once" example',
+	author: 'Backwards',
 	once: true, // optional
 	execute(client) {
 		// This example is redundant as you won't see the console with this program,

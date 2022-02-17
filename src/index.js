@@ -4,6 +4,7 @@ const path = require('path');
 const fs = require('fs');
 
 const Discord = require('discord.js');
+const console = require('console');
 
 let client;
 
@@ -11,6 +12,7 @@ let mainWindow;
 let secondaryWindow;
 
 let basicClientData = {};
+let eventsObject = {};
 
 let prefix;
 
@@ -94,6 +96,12 @@ ipcMain.on('main:account:login', (e, loginArray) => {
         } else {
             client.on(event.name, (...args) => event.execute(...args));
         }
+
+        eventsObject[event.name] = {
+            description: event.description,
+            author: event.author,
+        };
+
     }
 
     client.once('ready', () => {
@@ -102,12 +110,12 @@ ipcMain.on('main:account:login', (e, loginArray) => {
             protocol: 'file:',
             slashes: true,
         }));
-        
+
         basicClientData = {
-            "avatarURL" : client.user.avatarURL(),
-            "name" : client.user.username,
-            "serverCount" : client.guilds.cache.size,
-            "prefix" : prefix
+            "avatarURL": client.user.avatarURL(),
+            "name": client.user.username,
+            "serverCount": client.guilds.cache.size,
+            "prefix": prefix
         };
     });
 
@@ -126,7 +134,7 @@ ipcMain.on('main:account:login', (e, loginArray) => {
             await cmd.execute(message, args);
         } catch (error) {
             console.error(error);
-            await message.reply({ content: 'There was an error while executing this command!'});
+            await message.reply({ content: 'There was an error while executing this command!' });
         }
     })
 
@@ -184,7 +192,7 @@ let activityObj = {};
 
 ipcMain.on('secondary:account:set:activity', (e, activity) => {
     if (Object.keys(activity.name).length === 1) {
-        client.user.setActivity({type: activity.type.activityA, name: activity.name.activityA});
+        client.user.setActivity({ type: activity.type.activityA, name: activity.name.activityA });
         activityObj = {
             type: client.user.presence.activities[0].type,
             name: client.user.presence.activities[0].name
@@ -197,10 +205,10 @@ ipcMain.on('secondary:account:set:activity', (e, activity) => {
     interval = setInterval(() => {
         i = i + 1;
         if (i == Object.keys(activity.name).length) return i = -1
-        if (i == 0) client.user.setActivity({type: activity.type.activityA, name: `${activity.name.activityA}`});
-        if (i == 1) client.user.setActivity({type: activity.type.activityB, name: `${activity.name.activityB}`});
-        if (i == 2) client.user.setActivity({type: activity.type.activityC, name: `${activity.name.activityC}`});
-        if (i == 3) client.user.setActivity({type: activity.type.activityD, name: `${activity.name.activityD}`});
+        if (i == 0) client.user.setActivity({ type: activity.type.activityA, name: `${activity.name.activityA}` });
+        if (i == 1) client.user.setActivity({ type: activity.type.activityB, name: `${activity.name.activityB}` });
+        if (i == 2) client.user.setActivity({ type: activity.type.activityC, name: `${activity.name.activityC}` });
+        if (i == 3) client.user.setActivity({ type: activity.type.activityD, name: `${activity.name.activityD}` });
         activityObj = {
             type: client.user.presence.activities[0].type,
             name: client.user.presence.activities[0].name
@@ -243,7 +251,7 @@ ipcMain.on('secondary:page:open:commands', () => {
 })
 
 ipcMain.on('secondary:account:request:basicClientInfo:commands', () => {
-    
+
     let commands = {}
 
     for (const command of client.commands) {
@@ -285,4 +293,21 @@ ipcMain.on('basicClientData:update:prefix', (e, prefix) => {
     basicClientData.prefix = prefix;
     secondaryWindow.destroy();
     mainWindow.reload();
-})
+});
+
+ipcMain.on('secondary:account:request:basicClientInfo:events', () => {
+
+    let eventsObject = {};
+
+    const eventFiles = fs.readdirSync(path.join(__dirname, "..", "Addons", "Events")).filter(file => file.endsWith('.js'));
+
+    for (const file of eventFiles) {
+        const event = require(path.join(__dirname, "..", "Addons", "Events", file));
+        
+    };
+
+    setTimeout(() => {
+        console.log(eventsObject);
+        secondaryWindow.webContents.send('secondary:account:send:basicClientInfo:events', eventsObject);
+    }, 125);
+});

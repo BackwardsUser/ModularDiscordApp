@@ -5,10 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../styles/main.styles.css">
-    <title>Commands</title>
+    <title>Events</title>
 </head>
 <header>
-    <div class="account" id="account">
+    <div class="account disabled" id="account">
         <img src="" class="profilePicture disabled" id="profilePicture">
         <a class="accountName disabled" id="accountName"></a>
     </div>
@@ -41,19 +41,14 @@
         accountName.innerHTML = basicClientData.name;
     });
 
-    ipcRenderer.send('secondary:account:request:basicClientInfo:commands');
+    ipcRenderer.send('secondary:account:request:basicClientInfo:events');
 
-    ipcRenderer.on('secondary:account:send:basicClientInfo:commands', (e, commands) => {
-
-        console.log(commands)
-        console.log(Object.keys(commands).length)
-
-        for (var i = 0; i < Object.keys(commands).length; i++) {
+    ipcRenderer.on('secondary:account:send:basicClientInfo:events', (e, events) => {
+        for (var i = 0; i < Object.keys(events).length; i++) {
             var item = document.createElement("li");
             item.className = "item";
-            item.innerHTML = `${Object.keys(commands)[i]}<br/><br/>${commands[Object.keys(commands)[i]].Author}<br/><br/>${commands[Object.keys(commands)[i]].Description}`;
+            item.innerHTML = `${Object.keys(events)[i]}<br/><br/>${events[Object.keys(events)[i]].Author}`;
             addons.appendChild(item);
-            console.log(item)
         }
     });
 

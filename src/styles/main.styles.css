@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap");
 
 :root {
     --black: #1f1f1f;
@@ -6,10 +6,10 @@
     --dark-gray: #3f3f3f;
     --gray: #4d4d4d;
     --lighter-gray: #7f7f7f;
-    --lightest-gray: #CCCCCC;
+    --lightest-gray: #cccccc;
     --white: #dfdfdf;
 
-    --accent: #005A00;
+    --accent: #005a00;
 
     --header-height: 50px;
     --default-txt-size: 30px;
@@ -43,7 +43,73 @@ header {
     -webkit-app-region: drag;
     margin: auto;
     box-shadow: 0 4px 0.5rem var(--lighter-black);
-    transform: translate(5px, 10px);
+    transform: translate(5px, 8px);
+}
+
+.premium {
+    background: linear-gradient(124deg, #ff2400, #e81d1d, #e8b71d, #e3e81d, #1de840, #1ddde8, #2b1de8, #dd00f3, #dd00f3);
+    background-size: 500% 500%;
+
+    -webkit-animation: rainbow 18s ease infinite;
+    -z-animation: rainbow 18s ease infinite;
+    -o-animation: rainbow 18s ease infinite;
+    animation: rainbow 18s ease infinite;
+}
+
+@-webkit-keyframes rainbow {
+    0% {
+        background-position: 0% 82%
+    }
+
+    50% {
+        background-position: 100% 19%
+    }
+
+    100% {
+        background-position: 0% 82%
+    }
+}
+
+@-moz-keyframes rainbow {
+    0% {
+        background-position: 0% 82%
+    }
+
+    50% {
+        background-position: 100% 19%
+    }
+
+    100% {
+        background-position: 0% 82%
+    }
+}
+
+@-o-keyframes rainbow {
+    0% {
+        background-position: 0% 82%
+    }
+
+    50% {
+        background-position: 100% 19%
+    }
+
+    100% {
+        background-position: 0% 82%
+    }
+}
+
+@keyframes rainbow {
+    0% {
+        background-position: 0% 82%
+    }
+
+    50% {
+        background-position: 100% 19%
+    }
+
+    100% {
+        background-position: 0% 82%
+    }
 }
 
 body {
@@ -79,7 +145,6 @@ body {
     color: var(--white);
 }
 
-
 select {
     position: relative;
     padding: 5px 10px;
@@ -103,7 +168,7 @@ select {
 
 .button:hover {
     background-color: var(--lightest-gray);
-    box-shadow: 0 0 1rem var(--white)
+    box-shadow: 0 0 1rem var(--white);
 }
 
 input {
@@ -122,7 +187,6 @@ input {
     cursor: default !important;
 }
 
-
 /* Input Page */
 
 .incorrect {
@@ -135,7 +199,6 @@ input {
     font-size: 20px;
     font-family: "Quicksand";
 }
-
 
 /* Main Page */
 
@@ -160,7 +223,7 @@ input {
     position: relative;
     top: -14px;
     padding-left: 15px;
-    font-size: 25px
+    font-size: 25px;
 }
 
 .dropdown.displayed {
@@ -179,7 +242,8 @@ input {
     display: none;
 }
 
-.logout, .prefix {
+.logout,
+.prefix {
     font-size: 15px;
     font-family: "Quicksand";
     width: 100%;
@@ -206,21 +270,22 @@ input {
     align-items: center;
 }
 
-
 /* Plugins */
 
 .addonsBTN {
     padding: 10px 15px;
-    background: linear-gradient(90deg, var(--lighter-gray) 8.25rem, var(--lightest-gray) 5rem);
+    background: linear-gradient(90deg,
+            var(--lighter-gray) 8.25rem,
+            var(--lightest-gray) 5rem);
 }
 
 .text {
     float: left;
-    margin-right: 10px
+    margin-right: 10px;
 }
 
 .modCount {
-    float:right;
+    float: right;
     margin-left: 10px;
 }
 
@@ -236,6 +301,11 @@ input {
     margin: 5px 0;
 }
 
+.events {
+    background: linear-gradient(90deg,
+            var(--lighter-gray) 5.5rem,
+            var(--lightest-gray) 2rem) !important;
+}
 
 /* Prefix */
 .prefixpopupclose {
@@ -243,7 +313,7 @@ input {
 }
 
 .prefixpopupinput {
-    width: 400px
+    width: 400px;
 }
 
 .hidden {
