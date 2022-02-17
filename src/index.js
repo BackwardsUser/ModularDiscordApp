@@ -124,7 +124,7 @@ ipcMain.on('main:account:login', (e, loginArray) => {
             "prefix": prefix
         };
     });
-
+    
     client.on('messageCreate', async message => {
 
         const args = message.content.slice(prefix.length).split(' ');
@@ -137,7 +137,7 @@ ipcMain.on('main:account:login', (e, loginArray) => {
         if (!cmd || message.author.bot || !message.content.startsWith(prefix)) return;
 
         try {
-            await cmd.execute(message, args);
+            await cmd.execute(client, message, args);
         } catch (error) {
             console.error(error);
             await message.reply({ content: 'There was an error while executing this command!' });
