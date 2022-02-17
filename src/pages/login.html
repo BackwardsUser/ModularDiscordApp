@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,6 +11,7 @@
 <header>
     <button class="close" id="closeBtn">&times;</button>
 </header>
+
 <body>
     <form class="loginForm" id="login">
         <h1>Login</h1><br>
@@ -21,7 +23,7 @@
 </body>
 <script>
     const { ipcRenderer } = require('electron');
-    
+
     document.querySelector(".close").addEventListener('click', () => {
         ipcRenderer.send('main:close');
     });
@@ -30,7 +32,7 @@
         const inputValue = document.getElementById('tokenInput').value
         const prefixInput = document.getElementById('prefixInput').value
         const loginObject = {
-            token: inputValue, 
+            token: inputValue,
             prefix: prefixInput
         };
         console.log(loginObject);
@@ -42,4 +44,5 @@
     });
 
 </script>
+
 </html>

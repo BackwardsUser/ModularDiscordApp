@@ -46,8 +46,8 @@
     });
 
     document.getElementById('commands').addEventListener('click', () => {
-        ipcRenderer.send('secondary:page:open:commands')
-    })
+        ipcRenderer.send('secondary:page:open:commands');
+    });
 
     ipcRenderer.send('secondary:account:request:basicClientInfo');
 
@@ -57,10 +57,11 @@
         accountName.innerHTML = basicClientData.name;
     });
 
-    ipcRenderer.send('secondary:account:request:basicClientInfo:plugins')
+    ipcRenderer.send('secondary:account:request:basicClientInfo:plugins');
 
     ipcRenderer.on('secondary:account:send:basicClientInfo:plugins', (e, commandCount) => {
         commandsCount.textContent = commandCount;
-    })
+    });
+
 </script>
 </html>

@@ -42,11 +42,11 @@
 
         ipcRenderer.on('secondary:account:send:clientBasicInfo', (e, basicClientInfo) => {
             basicClientData = basicClientInfo
-            if (basicClientInfo.prefix)  input.value = basicClientInfo.prefix, inputLabel.innerText = "The Current Prefix is:";
+            if (basicClientInfo.prefix) input.value = basicClientInfo.prefix, inputLabel.innerText = "The Current Prefix is:";
         })
 
-        setInterval( () => {
-            if (input.value == basicClientData.prefix)  {
+        setInterval(() => {
+            if (input.value == basicClientData.prefix) {
                 inputLabel.className = "inputLabel"
                 inputLabel.innerText = "The Current Prefix is:";
                 submit.innerText = "Prefix hasn't changed"

@@ -1,4 +1,4 @@
-const premium = false;
+const premium = true;
 
 const { app, BrowserWindow, ipcMain } = require('electron');
 const url = require('url');
@@ -113,6 +113,10 @@ ipcMain.on('main:account:login', (e, loginArray) => {
             slashes: true,
         }));
 
+        setTimeout( () => {
+            if (premium) mainWindow.webContents.send('send-premium'), mainWindow.reload();
+        }, 120)
+
         basicClientData = {
             "avatarURL": client.user.avatarURL(),
             "name": client.user.username,
@@ -151,12 +155,19 @@ ipcMain.on('secondary:account:request:basicClientInfo', () => {
 });
 
 ipcMain.on('main:account:logout', () => {
+
     client.destroy();
+
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'pages/login.html'),
         protocol: 'file:',
         slashes: true,
     }));
+
+    setTimeout( () => {
+        if (premium) mainWindow.webContents.send('send-premium'), mainWindow.reload();
+    }, 120);
+
 });
 
 ipcMain.on('main:account:status:changed', (e, updatedStatus) => {
@@ -183,6 +194,11 @@ ipcMain.on('page:open:activity', () => {
         protocol: 'file:',
         slashes: true,
     }));
+
+    setTimeout( () => {
+        if (premium) secondaryWindow.webContents.send('send-premium'), secondaryWindow.reload();
+    }, 120);
+
 });
 
 ipcMain.on('main:account:require:activity', () => {
@@ -238,6 +254,10 @@ ipcMain.on('page:open:plugins', () => {
         protocol: 'file:',
         slashes: true,
     }));
+
+    setTimeout( () => {
+        if (premium) secondaryWindow.webContents.send('send-premium'), secondaryWindow.reload();
+    }, 120);
 })
 
 ipcMain.on('secondary:account:request:basicClientInfo:plugins', () => {
@@ -249,7 +269,11 @@ ipcMain.on('secondary:page:open:commands', () => {
         pathname: path.join(__dirname, 'pages/plugins/commands.html'),
         protocol: 'file:',
         slashes: true,
-    }))
+    }));
+
+    setTimeout( () => {
+        if (premium) secondaryWindow.webContents.send('send-premium'), secondaryWindow.reload();
+    }, 120);
 })
 
 ipcMain.on('secondary:account:request:basicClientInfo:commands', () => {
@@ -289,6 +313,11 @@ ipcMain.on('page:open:prefixPopup', () => {
         protocol: 'file:',
         slashes: true,
     }));
+
+    setTimeout( () => {
+        if (premium) secondaryWindow.webContents.send('send-premium'), secondaryWindow.reload();
+    }, 120);
+
 });
 
 ipcMain.on('basicClientData:update:prefix', (e, prefix) => {
@@ -313,3 +342,10 @@ ipcMain.on('secondary:account:request:basicClientInfo:events', () => {
         secondaryWindow.webContents.send('secondary:account:send:basicClientInfo:events', eventsObject);
     }, 125);
 });
+
+// ipcMain.on('check-premium', () => {
+//     if (premium) {
+//         if (secondaryWindow) secondaryWindow.webContents.send('send-premium'), secondaryWindow.reload();
+//         if (mainWindow) mainWindow.webContents.send('send-premium'), mainWindow.reload();
+//     }
+// })
