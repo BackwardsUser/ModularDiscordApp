@@ -39,6 +39,7 @@ header {
     position: fixed;
     left: -5%;
     top: -7px;
+    user-select: none;
     -webkit-user-select: none;
     -webkit-app-region: drag;
     margin: auto;
@@ -123,6 +124,7 @@ body {
     align-content: center;
     position: relative;
     top: 50px;
+    user-select: none;
     -webkit-user-select: none;
 }
 
