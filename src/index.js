@@ -342,10 +342,3 @@ ipcMain.on('secondary:account:request:basicClientInfo:events', () => {
         secondaryWindow.webContents.send('secondary:account:send:basicClientInfo:events', eventsObject);
     }, 125);
 });
-
-// ipcMain.on('check-premium', () => {
-//     if (premium) {
-//         if (secondaryWindow) secondaryWindow.webContents.send('send-premium'), secondaryWindow.reload();
-//         if (mainWindow) mainWindow.webContents.send('send-premium'), mainWindow.reload();
-//     }
-// })
