@@ -44,10 +44,6 @@
     ipcRenderer.send('secondary:account:request:basicClientInfo:commands');
 
     ipcRenderer.on('secondary:account:send:basicClientInfo:commands', (e, commands) => {
-
-        console.log(commands)
-        console.log(Object.keys(commands).length)
-
         for (var i = 0; i < Object.keys(commands).length; i++) {
             var item = document.createElement("li");
             item.className = "item";

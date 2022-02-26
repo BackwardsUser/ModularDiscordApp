@@ -126,7 +126,7 @@ ipcMain.on('main:account:login', (e, loginArray) => {
     });
     
     client.on('messageCreate', async message => {
-
+        console.log(client.commands)
         const args = message.content.slice(prefix.length).split(' ');
         const command = args.shift().toLowerCase();
 
@@ -279,7 +279,7 @@ ipcMain.on('secondary:page:open:commands', () => {
 ipcMain.on('secondary:account:request:basicClientInfo:commands', () => {
 
     let commands = {}
-
+    console.log(client.commands)
     for (const command of client.commands) {
 
         const cmd = client.commands.get(command[0])
@@ -326,6 +326,30 @@ ipcMain.on('basicClientData:update:prefix', (e, prefix) => {
     mainWindow.reload();
 });
 
+ipcMain.on('secondary:page:open:events', () => {
+    if (secondaryWindow) secondaryWindow.destroy();
+    secondaryWindow = new BrowserWindow({
+        width: 500,
+        height: 600,
+        frame: false,
+        resizable: false,
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false
+        },
+    });
+
+    secondaryWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'pages/popups/prefix.html'),
+        protocol: 'file:',
+        slashes: true,
+    }));
+
+    setTimeout( () => {
+        if (premium) secondaryWindow.webContents.send('send-premium'), secondaryWindow.reload();
+    }, 120);
+});
+
 ipcMain.on('secondary:account:request:basicClientInfo:events', () => {
 
     let eventsObject = {};
@@ -334,7 +358,7 @@ ipcMain.on('secondary:account:request:basicClientInfo:events', () => {
 
     for (const file of eventFiles) {
         const event = require(path.join(__dirname, "..", "Addons", "Events", file));
-        
+        console.log(event);
     };
 
     setTimeout(() => {

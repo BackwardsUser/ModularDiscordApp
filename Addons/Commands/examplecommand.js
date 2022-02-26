@@ -4,7 +4,7 @@ module.exports = {
         Author: "BackwardsUser",
         Description: "Just an Example Command"
     },
-    async execute(message, args) {
+    async execute(client, message, args) {
         // Code goes here
         await message.reply("This is an example command!")
     }

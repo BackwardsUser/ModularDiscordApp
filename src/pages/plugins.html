@@ -49,6 +49,10 @@
         ipcRenderer.send('secondary:page:open:commands');
     });
 
+    document.getElementById('events').addEventListener('click', () => {
+        ipcRenderer.send('secondary:page:open:events');
+    });
+
     ipcRenderer.send('secondary:account:request:basicClientInfo');
 
     ipcRenderer.on('secondary:account:send:clientBasicInfo', (e, basicClientInfo) => {
