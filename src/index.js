@@ -1,21 +1,21 @@
-const premium = true;
-
+// npm Packages
 const { app, BrowserWindow, ipcMain } = require('electron');
+const Discord = require('discord.js');
+const console = require('console');
+
+// Node Packages
 const url = require('url');
 const path = require('path');
 const fs = require('fs');
 
-const Discord = require('discord.js');
-const console = require('console');
-
-let client;
-
+// Electron Stuff
 let mainWindow;
 let secondaryWindow;
 
+// Bot Stuff
+let client;
 let basicClientData = {};
 let eventsObject = {};
-
 let prefix;
 
 app.on('ready', () => {
@@ -41,6 +41,40 @@ app.on('ready', () => {
         app.quit();
     });
 });
+
+ipcMain.on('saved.bot.data.request', () => {
+    mainWindow.once('ready-to-show', () => {
+        fs.readFile(path.join(__dirname, 'savedBots.json'), 'utf-8', function (err, data){
+            const obj = JSON.parse(data);
+            if (Object.keys(obj).length > 5) {
+                delete obj[Object.keys(obj)[0]]
+                console.log(obj)
+                fs.writeFileSync(path.join(__dirname, 'savedBots.json'), JSON.stringify(obj), 'utf-8', function (err) {
+                    if (err) {
+                        console.error(err)
+                    }
+                })
+            }
+            mainWindow.webContents.send('saved.bot.data.send', obj);
+        });
+    });
+});
+
+ipcMain.on('saved.bot.data.clear', () => {
+    fs.readFile(path.join(__dirname, 'savedBots.json'), 'utf-8', function (err, data){
+        const obj = JSON.parse(data);
+        for (key in obj) {
+            console.log(key)
+            delete obj[key];
+        }
+        fs.writeFileSync(path.join(__dirname, 'savedBots.json'), JSON.stringify(obj), 'utf-8', function (err) {
+            if (err) {
+                console.error(err)
+            }
+        })
+        mainWindow.reload();
+    });
+})
 
 ipcMain.on('main:close', () => {
     if (client) client.destroy();
@@ -113,9 +147,25 @@ ipcMain.on('main:account:login', (e, loginArray) => {
             slashes: true,
         }));
 
-        setTimeout( () => {
-            if (premium) mainWindow.webContents.send('send-premium'), mainWindow.reload();
-        }, 120)
+        if (!loginArray.selector) {
+            const clientName = client.user.username;
+                fs.readFile(path.join(__dirname, 'savedBots.json'), 'utf-8', function readFileCallback(err, data) {
+                    if (err) {
+                        console.error(err);
+                    } else {
+                        obj = JSON.parse(data);
+                        obj[clientName] = {
+                            "TOKEN" : loginArray.token,
+                            "PREFIX" : loginArray.prefix
+                        }
+                        fs.writeFileSync(path.join(__dirname, 'savedBots.json'), JSON.stringify(obj), 'utf-8', function (err) {
+                            if (err) {
+                                console.error(err)
+                            }
+                        })
+                    }
+                })
+        };
 
         basicClientData = {
             "avatarURL": client.user.avatarURL(),
@@ -124,7 +174,7 @@ ipcMain.on('main:account:login', (e, loginArray) => {
             "prefix": prefix
         };
     });
-    
+
     client.on('messageCreate', async message => {
         console.log(client.commands)
         const args = message.content.slice(prefix.length).split(' ');
@@ -164,10 +214,6 @@ ipcMain.on('main:account:logout', () => {
         slashes: true,
     }));
 
-    setTimeout( () => {
-        if (premium) mainWindow.webContents.send('send-premium'), mainWindow.reload();
-    }, 120);
-
 });
 
 ipcMain.on('main:account:status:changed', (e, updatedStatus) => {
@@ -194,10 +240,6 @@ ipcMain.on('page:open:activity', () => {
         protocol: 'file:',
         slashes: true,
     }));
-
-    setTimeout( () => {
-        if (premium) secondaryWindow.webContents.send('send-premium'), secondaryWindow.reload();
-    }, 120);
 
 });
 
@@ -254,10 +296,6 @@ ipcMain.on('page:open:plugins', () => {
         protocol: 'file:',
         slashes: true,
     }));
-
-    setTimeout( () => {
-        if (premium) secondaryWindow.webContents.send('send-premium'), secondaryWindow.reload();
-    }, 120);
 })
 
 ipcMain.on('secondary:account:request:basicClientInfo:plugins', () => {
@@ -270,16 +308,10 @@ ipcMain.on('secondary:page:open:commands', () => {
         protocol: 'file:',
         slashes: true,
     }));
-
-    setTimeout( () => {
-        if (premium) secondaryWindow.webContents.send('send-premium'), secondaryWindow.reload();
-    }, 120);
 })
 
 ipcMain.on('secondary:account:request:basicClientInfo:commands', () => {
-
     let commands = {}
-    console.log(client.commands)
     for (const command of client.commands) {
 
         const cmd = client.commands.get(command[0])
@@ -290,9 +322,10 @@ ipcMain.on('secondary:account:request:basicClientInfo:commands', () => {
         }
     }
 
+
     setTimeout(() => {
         secondaryWindow.webContents.send('secondary:account:send:basicClientInfo:commands', commands);
-    }, 125)
+    }, 150)
 });
 
 ipcMain.on('page:open:prefixPopup', () => {
@@ -314,10 +347,6 @@ ipcMain.on('page:open:prefixPopup', () => {
         slashes: true,
     }));
 
-    setTimeout( () => {
-        if (premium) secondaryWindow.webContents.send('send-premium'), secondaryWindow.reload();
-    }, 120);
-
 });
 
 ipcMain.on('basicClientData:update:prefix', (e, prefix) => {
@@ -327,27 +356,11 @@ ipcMain.on('basicClientData:update:prefix', (e, prefix) => {
 });
 
 ipcMain.on('secondary:page:open:events', () => {
-    if (secondaryWindow) secondaryWindow.destroy();
-    secondaryWindow = new BrowserWindow({
-        width: 500,
-        height: 600,
-        frame: false,
-        resizable: false,
-        webPreferences: {
-            nodeIntegration: true,
-            contextIsolation: false
-        },
-    });
-
     secondaryWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'pages/popups/prefix.html'),
+        pathname: path.join(__dirname, 'pages/plugins/events.html'),
         protocol: 'file:',
         slashes: true,
     }));
-
-    setTimeout( () => {
-        if (premium) secondaryWindow.webContents.send('send-premium'), secondaryWindow.reload();
-    }, 120);
 });
 
 ipcMain.on('secondary:account:request:basicClientInfo:events', () => {
@@ -362,7 +375,6 @@ ipcMain.on('secondary:account:request:basicClientInfo:events', () => {
     };
 
     setTimeout(() => {
-        console.log(eventsObject);
         secondaryWindow.webContents.send('secondary:account:send:basicClientInfo:events', eventsObject);
-    }, 125);
+    }, 150);
 });

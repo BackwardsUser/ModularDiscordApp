@@ -45,11 +45,11 @@
 
     ipcRenderer.on('secondary:account:send:basicClientInfo:commands', (e, commands) => {
         for (var i = 0; i < Object.keys(commands).length; i++) {
+            console.log(i)
             var item = document.createElement("li");
             item.className = "item";
             item.innerHTML = `${Object.keys(commands)[i]}<br/><br/>${commands[Object.keys(commands)[i]].Author}<br/><br/>${commands[Object.keys(commands)[i]].Description}`;
             addons.appendChild(item);
-            console.log(item)
         }
     });
 

@@ -18,29 +18,80 @@
         <a class="incorrect" id="incorrect">Incorrect Token</a><br>
         <input type="password" class="tokenInput" id="tokenInput" placeholder="Bot Token"><br><br>
         <input type="text" class="prefixInput" id="prefixInput" placeholder="Bot Prefix"><br><br>
-        <button type="submit" class="tokenButton button" id="tokenSubmit">Login</button>
+        <button type="button" class="tokenButton button" id="tokenSubmit">Login</button><br><br>
+        <select name="botHistory" id="botHistorySelector">
+        </select><br><br>
+        <button class="button" id="clearHistory">Clear History</button>
     </form>
 </body>
 <script>
     const { ipcRenderer } = require('electron');
 
+    let savedBotData;
+
+    ipcRenderer.send('saved.bot.data.request')
+
+    ipcRenderer.on('saved.bot.data.send', (e, savedData) => {
+        console.log(savedData);
+        savedBotData = savedData;
+        for (bot in savedData) {
+            const option = document.createElement('option');
+            option.innerText = bot;
+            option.value = bot;
+            document.querySelector("#botHistorySelector").appendChild(option);
+        }
+        if (!document.getElementById("botHistorySelector").firstElementChild) {
+            document.getElementById("botHistorySelector").style = "display: none";
+            document.getElementById("clearHistory").style = "display: none";
+        } else {
+            document.getElementById("botHistorySelector").className = "botHistory"
+            document.getElementById("clearHistory").className = "button"
+        }
+    })
+
     document.querySelector(".close").addEventListener('click', () => {
         ipcRenderer.send('main:close');
     });
 
-    document.getElementById("login").addEventListener('submit', () => {
+    document.getElementById('tokenSubmit').addEventListener('click', () => {
+        console.log("submit")
         const inputValue = document.getElementById('tokenInput').value
         const prefixInput = document.getElementById('prefixInput').value
-        const loginObject = {
-            token: inputValue,
-            prefix: prefixInput
-        };
-        console.log(loginObject);
-        ipcRenderer.send('main:account:login', loginObject)
-    });
+        const selector = document.getElementById('botHistorySelector')
+        let selectorValue;
+        if (selector) selectorValue = selector.value;
+        if (inputValue && prefixInput) {
+            const loginObject = {
+                token: inputValue,
+                prefix: prefixInput,
+                selector: false
+            };
+            console.log(loginObject);
+            ipcRenderer.send('main:account:login', loginObject)
+        } else if (selectorValue) {
+            const currentData = savedBotData[selectorValue]
+            const loginObject = {
+                token: currentData.TOKEN,
+                prefix: currentData.PREFIX,
+                selector: true
+            }
+            console.log(loginObject);
+            ipcRenderer.send('main:account:login', loginObject)
+        } else {
+            const incorrect = document.getElementById('incorrect');
+            incorrect.innerText = "Please Input a bot token!"
+            incorrect.className = "incorrect enabled";
+        }
+    })
 
     ipcRenderer.on('main:account:login:fail', () => {
-        document.getElementById('incorrect').className = "incorrect enabled";
+        const incorrect = document.getElementById('incorrect');
+            incorrect.innerText = "Incorrect Token!";
+            incorrect.className = "incorrect enabled";
+    });
+
+    document.getElementById("clearHistory").addEventListener('click', () => {
+        ipcRenderer.send('saved.bot.data.clear');
     });
 
 </script>
