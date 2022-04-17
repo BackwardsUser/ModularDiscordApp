@@ -62,7 +62,8 @@
 
         <input type="number" name="loopTimer" id="rotationNum" placeholder="Time it takes to rotate to next activity (seconds)">
 
-        <button type="submit" class="button" id="setActivity">Set Activities</button>
+        <button type="submit" class="button" id="setActivity">Set Activities</button><br><br><br>
+        <button type="reset" class="button" id="clear">Clear Activities</button>
     </form>
 </body>
 <script>
@@ -121,6 +122,10 @@
         activityPackage.loopTime = loopTime
         ipcRenderer.send('secondary:account:set:activity', activityPackage);
 
+    })
+
+    document.getElementById('clear').addEventListener('click', () => {
+        ipcRenderer.send('secondary:account:clear:activity')
     })
 
 </script>

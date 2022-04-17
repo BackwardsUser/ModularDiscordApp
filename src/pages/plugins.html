@@ -28,18 +28,23 @@
         <div class="text">
             Events
         </div>
-        <div class="modCount" id="eventCount">
+        <div class="modCount" id="eventsCount">
             0
         </div>
-    </button>
+    </button><br><br><br>
+    <button class="button" id="openPluginsFolder">Open Plugins Folder</button>
 </body>
 <script>
     basicClientData = {};
 
     const { ipcRenderer } = require('electron');
+    const url = require('url');
+    const path = require('path');
+
     const profilePicture = document.getElementById('profilePicture');
     const accountName = document.getElementById('accountName');
     const commandsCount = document.getElementById('commandCount');
+    const eventsCount = document.getElementById('eventsCount');
 
     document.querySelector(".close").addEventListener('click', () => {
         ipcRenderer.send('secondary:close');
@@ -63,9 +68,14 @@
 
     ipcRenderer.send('secondary:account:request:basicClientInfo:plugins');
 
-    ipcRenderer.on('secondary:account:send:basicClientInfo:plugins', (e, commandCount) => {
-        commandsCount.textContent = commandCount;
+    ipcRenderer.on('secondary:account:send:basicClientInfo:plugins', (e, pluginsCount) => {
+        commandsCount.textContent = pluginsCount.commandsCount;
+        eventsCount.textContent = pluginsCount.eventsCount
     });
+
+    document.getElementById('openPluginsFolder').addEventListener('click', ()=>{
+        ipcRenderer.send('secondary:window:open:plugins')
+    })
 
 </script>
 </html>

@@ -79,8 +79,11 @@
     });
 
     ipcRenderer.on('main:account:send:activity', (e, activity) => {
-        console.log(activity);
-        currentActivity.innerText = activity.type + " " + activity.name;
+        if (activity.enabled) {
+            currentActivity.innerText = activity.type + " " + activity.name;
+        } else {
+            currentActivity.innerText = activity.name;
+        };
     });
 
     document.getElementById('plugins').addEventListener('click', () => {

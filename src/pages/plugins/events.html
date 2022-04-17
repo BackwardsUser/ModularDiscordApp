@@ -44,11 +44,11 @@
     ipcRenderer.send('secondary:account:request:basicClientInfo:events');
 
     ipcRenderer.on('secondary:account:send:basicClientInfo:events', (e, events) => {
-        for (var i = 0; i < Object.keys(events).length; i++) {
-            var item = document.createElement("li");
-            item.className = "item";
-            item.innerHTML = `${Object.keys(events)[i]}<br/><br/>${events[Object.keys(events)[i]].Author}`;
-            addons.appendChild(item);
+        for (evt in events) {
+            const list = document.createElement('li')
+            list.className = "item";
+            list.innerHTML = `${evt}<br/><br/>${events[evt].Author}<br/><br/>${events[evt].Description}`
+            addons.appendChild(list)
         }
     });
 

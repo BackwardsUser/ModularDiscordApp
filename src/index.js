@@ -1,5 +1,5 @@
 // npm Packages
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, shell } = require('electron');
 const Discord = require('discord.js');
 const console = require('console');
 
@@ -48,7 +48,6 @@ ipcMain.on('saved.bot.data.request', () => {
             const obj = JSON.parse(data);
             if (Object.keys(obj).length > 5) {
                 delete obj[Object.keys(obj)[0]]
-                console.log(obj)
                 fs.writeFileSync(path.join(__dirname, 'savedBots.json'), JSON.stringify(obj), 'utf-8', function (err) {
                     if (err) {
                         console.error(err)
@@ -64,7 +63,6 @@ ipcMain.on('saved.bot.data.clear', () => {
     fs.readFile(path.join(__dirname, 'savedBots.json'), 'utf-8', function (err, data){
         const obj = JSON.parse(data);
         for (key in obj) {
-            console.log(key)
             delete obj[key];
         }
         fs.writeFileSync(path.join(__dirname, 'savedBots.json'), JSON.stringify(obj), 'utf-8', function (err) {
@@ -174,15 +172,12 @@ ipcMain.on('main:account:login', (e, loginArray) => {
             "prefix": prefix
         };
     });
-
+    
     client.on('messageCreate', async message => {
-        console.log(client.commands)
         const args = message.content.slice(prefix.length).split(' ');
         const command = args.shift().toLowerCase();
 
         const cmd = client.commands.get(command);
-
-        console.log(cmd);
 
         if (!cmd || message.author.bot || !message.content.startsWith(prefix)) return;
 
@@ -255,7 +250,8 @@ ipcMain.on('secondary:account:set:activity', (e, activity) => {
         client.user.setActivity({ type: activity.type.activityA, name: activity.name.activityA });
         activityObj = {
             type: client.user.presence.activities[0].type,
-            name: client.user.presence.activities[0].name
+            name: client.user.presence.activities[0].name,
+            enabled: true
         };
         mainWindow.webContents.send('main:account:send:activity', activityObj);
         return;
@@ -271,10 +267,25 @@ ipcMain.on('secondary:account:set:activity', (e, activity) => {
         if (i == 3) client.user.setActivity({ type: activity.type.activityD, name: `${activity.name.activityD}` });
         activityObj = {
             type: client.user.presence.activities[0].type,
-            name: client.user.presence.activities[0].name
+            name: client.user.presence.activities[0].name,
+            enabled: true
         };
         mainWindow.webContents.send('main:account:send:activity', activityObj);
     }, (activity.loopTime * 1000));
+});
+
+ipcMain.on('secondary:account:clear:activity', () => {
+    clearInterval(interval);
+    for (activity in activityObj) {
+        delete activityObj[activity];
+    };
+    client.user.setActivity()
+    activityObj = {
+        type: undefined,
+        name: "No Activity Set. Set it with the button below!",
+        enabled: false
+    }
+    mainWindow.webContents.send('main:account:send:activity', activityObj);
 });
 
 ipcMain.on('page:open:plugins', () => {
@@ -299,7 +310,11 @@ ipcMain.on('page:open:plugins', () => {
 })
 
 ipcMain.on('secondary:account:request:basicClientInfo:plugins', () => {
-    secondaryWindow.webContents.send('secondary:account:send:basicClientInfo:plugins', client.commands.size)
+    const pluginsCountObj = {
+        commandsCount: client.commands.size,
+        eventsCount: Object.keys(eventsObject).length
+    };
+    secondaryWindow.webContents.send('secondary:account:send:basicClientInfo:plugins', pluginsCountObj)
 })
 
 ipcMain.on('secondary:page:open:commands', () => {
@@ -371,10 +386,21 @@ ipcMain.on('secondary:account:request:basicClientInfo:events', () => {
 
     for (const file of eventFiles) {
         const event = require(path.join(__dirname, "..", "Addons", "Events", file));
-        console.log(event);
+        eventsObject[event.name] = {
+            Author: event.author,
+            Description: event.description,
+        }
     };
 
     setTimeout(() => {
         secondaryWindow.webContents.send('secondary:account:send:basicClientInfo:events', eventsObject);
     }, 150);
 });
+
+ipcMain.on('secondary:window:open:plugins', () => {
+    shell.openExternal(url.format({
+        pathname: path.join(__dirname, '../Addons'),
+        protocol: 'file:',
+        slashes: true,
+    }))
+})

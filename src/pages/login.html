@@ -32,7 +32,6 @@
     ipcRenderer.send('saved.bot.data.request')
 
     ipcRenderer.on('saved.bot.data.send', (e, savedData) => {
-        console.log(savedData);
         savedBotData = savedData;
         for (bot in savedData) {
             const option = document.createElement('option');
@@ -54,7 +53,6 @@
     });
 
     document.getElementById('tokenSubmit').addEventListener('click', () => {
-        console.log("submit")
         const inputValue = document.getElementById('tokenInput').value
         const prefixInput = document.getElementById('prefixInput').value
         const selector = document.getElementById('botHistorySelector')
@@ -66,7 +64,6 @@
                 prefix: prefixInput,
                 selector: false
             };
-            console.log(loginObject);
             ipcRenderer.send('main:account:login', loginObject)
         } else if (selectorValue) {
             const currentData = savedBotData[selectorValue]
@@ -75,7 +72,6 @@
                 prefix: currentData.PREFIX,
                 selector: true
             }
-            console.log(loginObject);
             ipcRenderer.send('main:account:login', loginObject)
         } else {
             const incorrect = document.getElementById('incorrect');

@@ -34,5 +34,7 @@ module.exports = {
 		// Having more than one "on" event at a time will cause the bot to throw an error as discord.js has a failsafe in place,
 		// to catch memory leaks, in the case 2 different addons are created that use the same event, a little splicing will be needed.
 		// Essentially, some coding is needed as having more than one "on  <event> (on messageCreate)"  event is bad.
+
+		// Use events carefully!
 	},
 };
