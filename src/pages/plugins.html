@@ -70,12 +70,12 @@
 
     ipcRenderer.on('secondary:account:send:basicClientInfo:plugins', (e, pluginsCount) => {
         commandsCount.textContent = pluginsCount.commandsCount;
-        eventsCount.textContent = pluginsCount.eventsCount
+        eventsCount.textContent = pluginsCount.eventsCount;
     });
 
     document.getElementById('openPluginsFolder').addEventListener('click', ()=>{
-        ipcRenderer.send('secondary:window:open:plugins')
-    })
+        ipcRenderer.send('secondary:window:open:plugins');
+    });
 
 </script>
 </html>
