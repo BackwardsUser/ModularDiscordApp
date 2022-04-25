@@ -147,6 +147,25 @@ body {
     color: var(--white);
 }
 
+.back {
+    padding: 0;
+    position: absolute;
+    font-size: var(--default-txt-size);
+    left: calc(87% + 10px);
+    padding: calc(var(--header-height) / 8) calc(var(--header-height) / 3.5);
+    -webkit-app-region: none;
+    color: var(--lightest-gray);
+    background: none;
+    border: solid rgba(255, 255, 255, 0) 1px;
+    cursor: pointer;
+    transition: all 500ms;
+}
+
+.back:hover {
+    text-shadow: 0 0 0.5rem var(--white);
+    color: var(--white);
+}
+
 select {
     position: relative;
     padding: 5px 10px;

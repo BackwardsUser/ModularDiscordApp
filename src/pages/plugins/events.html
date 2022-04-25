@@ -12,6 +12,7 @@
         <img src="" class="profilePicture disabled" id="profilePicture">
         <a class="accountName disabled" id="accountName"></a>
     </div>
+    <button class="back" id="backBtn">&#60;</button>
     <button class="close" id="closeBtn">&times;</button>
 </header>
 <body>
@@ -31,6 +32,10 @@
 
     document.querySelector(".close").addEventListener('click', () => {
         ipcRenderer.send('secondary:close');
+    });
+
+    document.querySelector(".back").addEventListener('click', () => {
+        ipcRenderer.send('secondary:page:plugins:back');
     });
 
     ipcRenderer.send('secondary:account:request:basicClientInfo');

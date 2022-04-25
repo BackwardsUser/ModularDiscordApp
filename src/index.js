@@ -51,9 +51,9 @@ ipcMain.on('saved.bot.data.request', () => {
                 fs.writeFileSync(path.join(__dirname, 'savedBots.json'), JSON.stringify(obj), 'utf-8', function (err) {
                     if (err) {
                         console.error(err)
-                    }
-                })
-            }
+                    };
+                });
+            };
             mainWindow.webContents.send('saved.bot.data.send', obj);
         });
     });
@@ -64,15 +64,15 @@ ipcMain.on('saved.bot.data.clear', () => {
         const obj = JSON.parse(data);
         for (key in obj) {
             delete obj[key];
-        }
+        };
         fs.writeFileSync(path.join(__dirname, 'savedBots.json'), JSON.stringify(obj), 'utf-8', function (err) {
             if (err) {
                 console.error(err)
-            }
-        })
+            };
+        });
         mainWindow.reload();
     });
-})
+});
 
 ipcMain.on('main:close', () => {
     if (client) client.destroy();
@@ -119,7 +119,7 @@ ipcMain.on('main:account:login', (e, loginArray) => {
     for (const file of commandFiles) {
         const command = require(path.join(__dirname, "..", "Addons", "Commands", file));
         client.commands.set(command.data.Name, command);
-    }
+    };
 
     const eventFiles = fs.readdirSync(path.join(__dirname, "..", "Addons", "Events")).filter(file => file.endsWith('.js'))
 
@@ -129,7 +129,7 @@ ipcMain.on('main:account:login', (e, loginArray) => {
             client.once(event.name, (...args) => event.execute(...args));
         } else {
             client.on(event.name, (...args) => event.execute(...args));
-        }
+        };
 
         eventsObject[event.name] = {
             description: event.description,
@@ -402,5 +402,13 @@ ipcMain.on('secondary:window:open:plugins', () => {
         pathname: path.join(__dirname, '../Addons'),
         protocol: 'file:',
         slashes: true,
-    }))
-})
+    }));
+});
+
+ipcMain.on('secondary:page:plugins:back', () => {
+    secondaryWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'pages/plugins.html'),
+        protocol: 'file:',
+        slashes: true,
+    }));
+});
