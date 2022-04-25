@@ -1,0 +1,23 @@
+{
+  "name": "testdiscordapp",
+  "version": "0.15.3",
+  "description": "a app",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BackwardsUser/testDiscordApp.git"
+  },
+  "author": "Backwards",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/BackwardsUser/testDiscordApp/issues"
+  },
+  "homepage": "https://github.com/BackwardsUser/testDiscordApp#readme",
+  "dependencies": {
+    "discord.js": "^13.6.0",
+    "electron": "^18.1.0"
+  }
+}
