@@ -11,8 +11,10 @@ Note that through-out the beta stages I will not be approving any plugins.
 
 Suggestions? Send them to my instagram! @backwards_user
 
-###### The current release is a closed beta, message me on Discord to get a built copy.
+### The current release is a closed beta, message me on Discord to get a built copy.
 If you know how feel free to download the code and build it, just keep in mind that its not a clean since its in beta.
+
+
 
 Need to contact me?
 Email- AlexHardingYT@gmail.com
