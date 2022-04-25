@@ -1,0 +1,342 @@
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap");
+
+:root {
+    --black: #1f1f1f;
+    --lighter-black: #303030;
+    --dark-gray: #3f3f3f;
+    --gray: #4d4d4d;
+    --lighter-gray: #7f7f7f;
+    --lightest-gray: #cccccc;
+    --white: #dfdfdf;
+
+    --accent: #005a00;
+
+    --header-height: 50px;
+    --default-txt-size: 30px;
+}
+
+/* General Styles */
+
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: var(--black);
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--lighter-gray);
+    border: 3px solid transparent;
+    border-radius: 10rem;
+    background-clip: content-box;
+}
+
+header {
+    background-color: var(--dark-gray);
+    height: var(--header-height);
+    width: 110%;
+    position: fixed;
+    left: -5%;
+    top: -7px;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-app-region: drag;
+    margin: auto;
+    box-shadow: 0 4px 0.5rem var(--lighter-black);
+    transform: translate(5px, 8px);
+}
+
+.premium {
+    background: linear-gradient(124deg, #ff2400, #e81d1d, #e8b71d, #e3e81d, #1de840, #1ddde8, #2b1de8, #dd00f3, #dd00f3);
+    background-size: 500% 500%;
+
+    -webkit-animation: rainbow 18s ease infinite;
+    -z-animation: rainbow 18s ease infinite;
+    -o-animation: rainbow 18s ease infinite;
+    animation: rainbow 18s ease infinite;
+}
+
+@-webkit-keyframes rainbow {
+    0% {
+        background-position: 0% 82%
+    }
+
+    50% {
+        background-position: 100% 19%
+    }
+
+    100% {
+        background-position: 0% 82%
+    }
+}
+
+@-moz-keyframes rainbow {
+    0% {
+        background-position: 0% 82%
+    }
+
+    50% {
+        background-position: 100% 19%
+    }
+
+    100% {
+        background-position: 0% 82%
+    }
+}
+
+@-o-keyframes rainbow {
+    0% {
+        background-position: 0% 82%
+    }
+
+    50% {
+        background-position: 100% 19%
+    }
+
+    100% {
+        background-position: 0% 82%
+    }
+}
+
+@keyframes rainbow {
+    0% {
+        background-position: 0% 82%
+    }
+
+    50% {
+        background-position: 100% 19%
+    }
+
+    100% {
+        background-position: 0% 82%
+    }
+}
+
+body {
+    background-color: var(--gray);
+    color: var(--lightest-gray);
+    overflow-x: hidden;
+    font-size: 20px;
+    font-family: "Quicksand";
+    text-align: center;
+    align-items: center;
+    align-content: center;
+    position: relative;
+    top: 50px;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.close {
+    padding: 0;
+    position: absolute;
+    font-size: var(--default-txt-size);
+    left: calc(90% + 10px);
+    padding: calc(var(--header-height) / 8) calc(var(--header-height) / 3.5);
+    -webkit-app-region: none;
+    color: var(--lightest-gray);
+    background: none;
+    border: solid rgba(255, 255, 255, 0) 1px;
+    cursor: pointer;
+    transition: all 500ms;
+}
+
+.close:hover {
+    text-shadow: 0 0 0.5rem var(--white);
+    color: var(--white);
+}
+
+.back {
+    padding: 0;
+    position: absolute;
+    font-size: var(--default-txt-size);
+    left: calc(87% + 10px);
+    padding: calc(var(--header-height) / 8) calc(var(--header-height) / 3.5);
+    -webkit-app-region: none;
+    color: var(--lightest-gray);
+    background: none;
+    border: solid rgba(255, 255, 255, 0) 1px;
+    cursor: pointer;
+    transition: all 500ms;
+}
+
+.back:hover {
+    text-shadow: 0 0 0.5rem var(--white);
+    color: var(--white);
+}
+
+select {
+    position: relative;
+    padding: 5px 10px;
+    font-size: 20px;
+    font-family: "Quicksand";
+    border-radius: 10px;
+    background-color: var(--white);
+    outline: none;
+}
+
+.button {
+    font-size: 20px;
+    font-family: "Quicksand";
+    border: none;
+    border-radius: 10px;
+    padding: 5px 10px;
+    background-color: var(--lighter-gray);
+    cursor: pointer;
+    transition: all 500ms;
+}
+
+.button:hover {
+    background-color: var(--lightest-gray);
+    box-shadow: 0 0 1rem var(--white);
+}
+
+input {
+    font-size: 20px;
+    padding: 5px 10px;
+    width: 600px;
+    text-align: center;
+    outline: none;
+    border: none;
+    box-shadow: 0 0 3rem var(--black);
+    font-family: "Quicksand";
+    border-radius: 20px;
+}
+
+.disabled {
+    cursor: default !important;
+}
+
+/* Input Page */
+
+.incorrect {
+    display: none;
+}
+
+.incorrect.enabled {
+    display: block;
+    color: rgb(255, 0, 0);
+    font-size: 20px;
+    font-family: "Quicksand";
+}
+
+/* Main Page */
+
+.account {
+    position: absolute;
+    left: 50px;
+    background: none;
+    border: none;
+    padding: calc(var(--header-height) / 25) 0;
+    cursor: pointer;
+    -webkit-app-region: none;
+}
+
+.profilePicture {
+    height: 45px;
+    width: 45px;
+    border-radius: 25px;
+}
+
+.accountName {
+    color: var(--lightest-gray);
+    position: relative;
+    top: -14px;
+    padding-left: 15px;
+    font-size: 25px;
+}
+
+.dropdown.displayed {
+    position: absolute;
+    width: 150px;
+    height: auto;
+    background-color: var(--dark-gray);
+    top: 50px;
+    left: 85px;
+    padding: 10px 0;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.dropdown.hidden {
+    display: none;
+}
+
+.logout,
+.prefix {
+    font-size: 15px;
+    font-family: "Quicksand";
+    width: 100%;
+    cursor: pointer;
+}
+
+.logout {
+    color: rgb(200, 0, 0);
+}
+
+.prefix {
+    color: rgb(240, 240, 240);
+}
+
+.activity {
+    background-color: var(--white);
+    padding: 10px 25px;
+    color: var(--dark-gray);
+    border-radius: 10px;
+}
+
+.center {
+    width: 100%;
+    align-items: center;
+}
+
+/* Plugins */
+
+.addonsBTN {
+    padding: 10px 15px;
+    background: linear-gradient(90deg,
+            var(--lighter-gray) 8.25rem,
+            var(--lightest-gray) 5rem);
+}
+
+.text {
+    float: left;
+    margin-right: 10px;
+}
+
+.modCount {
+    float: right;
+    margin-left: 10px;
+}
+
+.addons {
+    list-style-type: none;
+}
+
+.item {
+    width: 70%;
+    background-color: var(--lighter-gray);
+    border: solid 4px var(--dark-gray);
+    border-radius: 10px;
+    margin: 5px 0;
+}
+
+.events {
+    background: linear-gradient(90deg,
+            var(--lighter-gray) 5.5rem,
+            var(--lightest-gray) 2rem) !important;
+}
+
+/* Prefix */
+.prefixpopupclose {
+    left: 468px;
+}
+
+.prefixpopupinput {
+    width: 400px;
+}
+
+.hidden {
+    visibility: hidden;
+}

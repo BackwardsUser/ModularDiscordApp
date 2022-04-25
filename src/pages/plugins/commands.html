@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../styles/main.styles.css">
+    <title>Commands</title>
+</head>
+<header>
+    <div class="account" id="account">
+        <img src="" class="profilePicture disabled" id="profilePicture">
+        <a class="accountName disabled" id="accountName"></a>
+    </div>
+    <button class="back" id="backBtn">&#60;</button>
+    <button class="close" id="closeBtn">&times;</button>
+</header>
+<body>
+    <center>
+        <ul class="addons" id="addons">
+        </ul>
+        <br>
+    </center>
+</body>
+<script>
+    basicClientData = {};
+
+    const { ipcRenderer } = require('electron');
+    const profilePicture = document.getElementById('profilePicture');
+    const accountName = document.getElementById('accountName');
+    const addons = document.getElementById('addons')
+
+    document.querySelector(".close").addEventListener('click', () => {
+        ipcRenderer.send('secondary:close');
+    });
+
+    document.querySelector(".back").addEventListener('click', () => {
+        ipcRenderer.send('secondary:page:plugins:back');
+    });
+
+    ipcRenderer.send('secondary:account:request:basicClientInfo');
+
+    ipcRenderer.on('secondary:account:send:clientBasicInfo', (e, basicClientInfo) => {
+        basicClientData = basicClientInfo;
+        profilePicture.src = basicClientData.avatarURL;
+        accountName.innerHTML = basicClientData.name;
+    });
+
+    ipcRenderer.send('secondary:account:request:basicClientInfo:commands');
+
+    ipcRenderer.on('secondary:account:send:basicClientInfo:commands', (e, commands) => {
+        for (cmd in commands) {
+            var item = document.createElement("li");
+            item.className = "item";
+            item.innerHTML = `${cmd}<br/><br/>${commands[cmd].Author}<br><br>${commands[cmd].Description}`;
+            addons.appendChild(item);
+        }
+    });
+
+</script>
+</html>

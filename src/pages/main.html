@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles/main.styles.css">
+    <title>Main</title>
+</head>
+
+<header>
+    <button class="account" id="account">
+        <img src="" class="profilePicture" id="profilePicture">
+        <a class="accountName" id="accountName"></a>
+    </button>
+    <div class="dropdown hidden" id="dropdown">
+        <a class="prefix" id="prefix">prefix: nil</a><br>
+        <a class="logout" id="logout">Logout</a>
+    </div>
+    <button class="close" id="closeBtn">&times;</button>
+</header>
+
+<body>
+    <br>
+    <select name="BotStatus" id="botStatus" class="botStatus" >
+        <option value="online">Online</option>
+        <option value="dnd">DnD</option>
+        <option value="idle">Away</option>
+        <option value="invisible">Offline</option>
+    </select><br><br><br>
+    <div class="center">
+        <div class="activity" id="currentActivity">No Activity Set. Set it with the button below!</div>
+    </div><br>
+    <button class="button" id="activity">Set Activity</button><br><br><br>
+    <button class="button" id="plugins">Plugins</button>
+</body>
+<script>
+
+    basicClientData = {};
+
+    const { ipcRenderer } = require('electron');
+    const profilePicture = document.getElementById('profilePicture');
+    const accountName = document.getElementById('accountName');
+    const currentActivity = document.getElementById('currentActivity');
+    const prefix = document.getElementById('prefix');
+
+    ipcRenderer.send('main:account:request:basicClientInfo');
+
+    ipcRenderer.on('main:account:send:clientBasicInfo', (e, basicClientInfo) => {
+        basicClientData = basicClientInfo;
+        profilePicture.src = basicClientData.avatarURL;
+        accountName.innerHTML = basicClientData.name;
+        prefix.innerText = `Prefix: ${basicClientData.prefix}`;
+    });
+
+    document.getElementById('closeBtn').addEventListener('click', () => {
+        ipcRenderer.send('main:close');
+    });
+
+    document.getElementById('account').addEventListener('click', () => {
+        const dropdown = document.getElementById('dropdown');
+        if (dropdown.className === "dropdown hidden") {
+            dropdown.className = "dropdown displayed";
+        } else {
+            dropdown.className = "dropdown hidden";
+        };
+    });
+
+    document.getElementById('logout').addEventListener('click', () => {
+        ipcRenderer.send('main:account:logout');
+    });
+
+    document.getElementById('botStatus').addEventListener('change', () => {
+        ipcRenderer.send('main:account:status:changed', document.getElementById('botStatus').value);
+    });
+
+    document.getElementById('activity').addEventListener('click', () => {
+        ipcRenderer.send('page:open:activity');
+    });
+
+    ipcRenderer.on('main:account:send:activity', (e, activity) => {
+        if (activity.enabled) {
+            currentActivity.innerText = activity.type + " " + activity.name;
+        } else {
+            currentActivity.innerText = activity.name;
+        };
+    });
+
+    document.getElementById('plugins').addEventListener('click', () => {
+        ipcRenderer.send('page:open:plugins')
+    })
+
+    prefix.addEventListener('click', () => {
+        ipcRenderer.send('page:open:prefixPopup');
+    });
+
+</script>
+</html>

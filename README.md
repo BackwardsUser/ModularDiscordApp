@@ -1,4 +1,5 @@
-# idk what this app should be called...
-its like a plugin based discord bot thing, so people with no coding experience can have a discord bot.
-Commands, Events and other things will be able to be imported into a file.
-This bot will be very community based where these "plugins" can be submitted for approval, after which the "plugins" can be used by regular people.
+# Don't take from Dev branch. Never take from Dev branch, usually a bad idea.
+Dev branch is to migrate/backup the code.
+also so people can see progress.
+
+Not sure when this project will be finished, just kind of something I'm working on in my spare time...
