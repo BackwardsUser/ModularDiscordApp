@@ -4,9 +4,7 @@
   "description": "A Modular Bot",
   "main": "src/index.js",
   "scripts": {
-    "dev": "electron .",
-    "package": "electron-packager . ModularBot --platform win32 --arch x64 --out dist/ --icon src/assets/icons/icon.ico --executable-name modular-bot",
-    "setup": "electron-installer-windows --src dist/ModularBot-win32-x64/ --dest dist/installers/ --icon src/assets/icons/icon.ico"
+    "dev": "electron ."
   },
   "author": "Backwards",
   "license": "MIT",
