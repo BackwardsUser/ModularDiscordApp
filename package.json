@@ -1,0 +1,23 @@
+{
+    "name": "modulardiscord",
+    "version": "2.0.0",
+    "description": "Complete rewrite",
+    "main": "src/JS/index.js",
+    "scripts": {
+        "test": "electron ."
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/BackwardsUser/testDiscordApp.git#dev"
+    },
+    "author": "Backwards",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/BackwardsUser/testDiscordApp/issues"
+    },
+    "homepage": "https://github.com/BackwardsUser/testDiscordApp/tree/dev#readme",
+    "dependencies": {
+        "discord.js": "^13.6.0",
+        "electron": "^19.0.3"
+    }
+}

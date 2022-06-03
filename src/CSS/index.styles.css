@@ -1,0 +1,90 @@
+body {
+    background-color: #555
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+nav {
+    width: 100vw;
+    height: 60px;
+    background-color: #222;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    -webkit-user-select: none;
+    -webkit-app-region: drag;
+    font-family: Roboto;
+}
+
+.title {
+    font-size: 45px;
+    padding: 15px;
+    -webkit-app-region: none;
+    font-weight: bold;
+}
+
+.buttonContainer {
+    padding: 15px;
+}
+
+.windowCtrl {
+    -webkit-user-select: auto;
+    -webkit-app-region: no-drag;
+    padding: 5px;
+    font-size: 23px;
+    cursor: pointer;
+    transition-duration: 500ms;
+}
+
+.windowCtrl:hover {
+    color: #aaaa;
+}
+
+.body {
+    padding-top: 10vh;
+}
+
+input {
+    position: relative;
+    width: 30rem;
+    height: 2rem;
+    font-size: 1.5rem;
+    font-family: Roboto;
+    border-radius: 0.5rem;
+    border: none;
+    padding: 0.25rem 0.5rem;
+    outline: none;
+    font-weight: 400;
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+}
+
+.history {
+    margin-top: 1rem;
+    width: 6rem;
+    font-size: 1.5rem;
+    border-radius: 0.5rem;
+    font-family: Roboto;
+    cursor: pointer;
+    outline: none;
+}
+
+.loginBtn {
+    margin-top: 1rem;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    font-family: Roboto;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 0.25rem;
+    border: none;
+    transition-duration: 250ms;
+}
+
+.loginBtn:hover {
+    background-color: #BBBBBB;
+}
